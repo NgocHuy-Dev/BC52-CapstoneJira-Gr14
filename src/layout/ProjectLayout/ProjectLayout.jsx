@@ -18,7 +18,7 @@ export default function ProjectLayout() {
           <Header />
           <div className="dummy-element"></div>
           <ProjectManagement />
-          <Footer />
+          {/* <Footer /> */}
         </Grid>
       </Grid>
     </>

@@ -16,11 +16,16 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CreateIcon from "@mui/icons-material/Create";
 import LineStyleIcon from "@mui/icons-material/LineStyle";
-import { Text } from "./styles";
+import NearMeIcon from "@mui/icons-material/NearMe";
+import FolderIcon from "@mui/icons-material/Folder";
+import NoteAltIcon from "@mui/icons-material/NoteAlt";
+import { Text, NavListButton } from "./styles";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
 
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -50,63 +55,63 @@ export default function Navbar() {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <NavListButton>
               <Text>
                 <DashboardIcon sx={{ marginRight: 2 }} /> Cyber Board
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <NavListButton onClick={navigate("/")}>
               <Text>
                 <SettingsIcon sx={{ marginRight: 2 }} /> Project Management
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <NavListButton>
               <Text>
                 <CreateIcon sx={{ marginRight: 2 }} /> Create Project
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
         </List>
         <Divider />
         <List>
           <ListItem>
-            <ListItemButton>
+            <NavListButton>
               <Text>
                 <LocalShippingIcon sx={{ marginRight: 2 }} /> Release
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <NavListButton>
               <Text>
-                <LocalShippingIcon sx={{ marginRight: 2 }} /> Issues and fillter
+                <LineStyleIcon sx={{ marginRight: 2 }} /> Issues and fillter
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <NavListButton>
               <Text>
-                <LocalShippingIcon sx={{ marginRight: 2 }} /> Pages
+                <NoteAltIcon sx={{ marginRight: 2 }} /> Pages
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <NavListButton>
               <Text>
-                <LocalShippingIcon sx={{ marginRight: 2 }} /> Report
+                <NearMeIcon sx={{ marginRight: 2 }} /> Report
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <NavListButton>
               <Text>
-                <LocalShippingIcon sx={{ marginRight: 2 }} /> Components
+                <FolderIcon sx={{ marginRight: 2 }} /> Components
               </Text>
-            </ListItemButton>
+            </NavListButton>
           </ListItem>
         </List>
       </Drawer>
