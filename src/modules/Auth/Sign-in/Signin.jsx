@@ -11,7 +11,6 @@ import bg from "../../../assets/img/bg-signin.jpg";
 import Swal from "sweetalert2";
 import { Grid, Paper, Typography, TextField } from "@mui/material";
 import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./styles";
-import Loading from "../../../components/Loading/Loading";
 
 const signinSchema = object({
   email: string().required("Emal không được để trống"),
@@ -57,10 +56,11 @@ export default function Signin() {
   };
 
   // currentUser khác null => user đã đăng nhập => điều hướng về Home
-  // if (currentUser) {
-  //   const redirectTo = searchParams.get("redirectTo");
-  //   return <Navigate to={redirectTo || "/"} replace />;
-  // }
+  if (currentUser) {
+    console.log("đã đăng nhập");
+    const redirectTo = searchParams.get("redirectTo");
+    return <Navigate to={redirectTo || "/"} replace />;
+  }
 
   return (
     <Grid container component="main">

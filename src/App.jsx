@@ -11,10 +11,12 @@ function App() {
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ProjectLayout />}>
-            <Route index element={<Home />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<ProjectLayout />}>
+              <Route index element={<Home />} />
+            </Route>
+            <Route path="/edit/:projectId" element={<EditProject />} />
           </Route>
-          {/* <Route path="/edit" element={<div>hihihi</div>} /> */}
 
           <Route path="/sign-in" element={<SignIn />} />
         </Routes>

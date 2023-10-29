@@ -8,10 +8,10 @@ export default function ProtectedRoute({ children }) {
   const location = useLocation();
   console.log(location);
 
-  // if (!currentUser) {
-  //   // chưa đăng nhập
-  //   const url = `sign-in?redirectTo=${location.pathname}`;
-  //   return <Navigate to={url} replace />;
-  // }
+  if (!currentUser) {
+    // chưa đăng nhập
+    const url = `sign-in?redirectTo=${location.pathname}`;
+    return <Navigate to={url} replace />;
+  }
   return children || <Outlet />;
 }

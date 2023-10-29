@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Avatar, Button } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,24 +24,34 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-const drawerWidth = 300;
+const drawerWidth = 270;
 
 export default function Navbar() {
-  const navigate = useNavigate();
   const { currentUser, handleSignout } = useUserContext();
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   // hàm gì đó
+
+  //   handleGohome();
+  // }, []);
+
+  const handleSignin = () => {
+    navigate(`/sign-in`);
+  };
+  const handleSignup = () => {
+    navigate(`/sign-up`);
+  };
+  const handleGohome = () => {
+    navigate(`/`);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Permanent drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      ></AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -55,13 +65,16 @@ export default function Navbar() {
         anchor="left"
       >
         <Toolbar>
-          {/* {currentUser && (
+          {currentUser && (
             <Box>
               <Button>
-                {" "}
                 <Avatar src={avt}>{currentUser.hoTen}</Avatar>
               </Button>
-              <Button onClick={handleSignout}>
+              <Button
+                sx={{ fontSize: "0.675rem" }}
+                variant="outlined"
+                onClick={handleSignout}
+              >
                 <LogoutIcon />
                 Đăng Xuất
               </Button>
@@ -70,23 +83,23 @@ export default function Navbar() {
           {!currentUser && (
             <Box>
               <Button
-                sx={{ margin: 1 }}
-                onClick={() => navigate(`/sign-in`)}
+                sx={{ margin: 1, fontSize: "0.8" }}
+                onClick={handleSignin}
                 variant="outlined"
                 startIcon={<LoginIcon />}
               >
                 Đăng nhập
               </Button>
               <Button
-                sx={{ margin: 1 }}
-                onClick={() => navigate(`/sign-up`)}
+                sx={{ margin: 1, fontSize: "0.8" }}
+                onClick={handleSignup}
                 variant="outlined"
                 startIcon={<HowToRegIcon />}
               >
                 Đăng Ký
               </Button>
             </Box>
-          )} */}
+          )}
         </Toolbar>
         <Divider />
         <List>
@@ -98,7 +111,7 @@ export default function Navbar() {
             </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <NavListButton onClick={navigate("/")}>
+            <NavListButton onClick={handleGohome}>
               <Text>
                 <SettingsIcon sx={{ marginRight: 2 }} /> Project Management
               </Text>
