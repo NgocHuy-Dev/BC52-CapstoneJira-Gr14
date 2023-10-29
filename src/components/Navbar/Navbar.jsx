@@ -51,7 +51,7 @@ export default function Navbar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar />
+        <Toolbar>hehe</Toolbar>
         <Divider />
         <List>
           <ListItem disablePadding>
