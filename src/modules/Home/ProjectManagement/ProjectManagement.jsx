@@ -10,42 +10,42 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 
 import { Creator, Member, MemberAdd } from "./style";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectManagement() {
+  const navigate = useNavigate();
   const { data: allProject = [], isLoading } = useQuery({
     queryKey: ["project"],
     queryFn: getAllProject,
   });
 
-  // const maxAvatars = 3;
-  // const displayedUsers = users.slice(0, maxAvatars); // Lấy tối đa 3 người dùng
-  // const remainingCount = users.length - maxAvatars; // Số lượng người dùng còn lại
   // === thêm nút chức năng
-  function ActionsCell(params) {
-    const handleEdit = () => {
-      // Xử lý sự kiện chỉnh sửa
-      console.log(`Chỉnh sửa hàng với ID: ${params.row.id}`);
-    };
+  // function ActionsCell(params) {
+  //   const handleEdit = React.useCallback(() => {
+  //     navigate(`/edit/${params.row.id}`);
+  //     // Xử lý sự kiện chỉnh sửa
+  //     console.log(`Chỉnh sửa hàng với ID: ${params.row.id}`);
+  //   }, []);
 
-    const handleDelete = () => {
-      // Xử lý sự kiện xóa
-      console.log(`Xóa hàng với ID: ${params.row.id}`);
-    };
+  //   const handleDelete = React.useCallback(() => {
+  //     // Xử lý sự kiện xóa
+  //     console.log(`Xóa hàng với ID: ${params.row.id}`);
+  //   }, []);
 
-    return (
-      <div>
-        <IconButton onClick={handleEdit}>
-          <EditIcon />
-        </IconButton>
-        <IconButton onClick={handleDelete}>
-          <DeleteIcon />
-        </IconButton>
-      </div>
-    );
-  }
+  //   return (
+  //     <div>
+  //       <IconButton onClick={handleEdit}>
+  //         <EditIcon />
+  //       </IconButton>
+  //       <IconButton onClick={handleDelete}>
+  //         <DeleteIcon />
+  //       </IconButton>
+  //     </div>
+  //   );
+  // }
 
   const columns = [
-    { field: "categoryId", headerName: "ID", width: 100 },
+    { field: "id", headerName: "ID", width: 100 },
     { field: "projectName", headerName: "Project Name", width: 200 },
     { field: "categoryName", headerName: "Category", width: 200 },
     {
@@ -79,9 +79,26 @@ export default function ProjectManagement() {
       field: "action",
       headerName: "Action",
       with: 100,
-      renderCell: ActionsCell,
+      renderCell: (params) => (
+        <div>
+          <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => handleDelete(params.row.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ),
     },
   ];
+
+  const handleEdit = (id) => {
+    console.log("id là:", id);
+    navigate(`/edit/${id}`);
+  };
+  const handleDelete = (id) => {
+    console.log("id cần xóa là:", id);
+  };
 
   console.log("data", allProject);
   if (isLoading) {

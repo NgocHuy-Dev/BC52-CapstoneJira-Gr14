@@ -12,8 +12,9 @@ function App() {
         <Routes>
           <Route path="/" element={<ProjectLayout />}>
             <Route index element={<Home />} />
-            <Route path="edit/:idProject" element={<EditProject />} />
+            <Route path="edit/:projectId" element={<EditProject />} />
           </Route>
+
           <Route path="sign-in" element={<SignIn />} />
         </Routes>
       </BrowserRouter>
