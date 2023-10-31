@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 
-import { DataGrid, daDK } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProject } from "../../../apis/projectAPI";
 import Loading from "../../../components/Loading/Loading";
-import { Stack, Avatar } from "@mui/material";
+import { AvatarGroup, Stack } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
@@ -17,32 +17,19 @@ export default function ProjectManagement() {
   const { data: allProject = [], isLoading } = useQuery({
     queryKey: ["project"],
     queryFn: getAllProject,
+    refetchOnWindowFocus: false,
   });
 
-  // === thêm nút chức năng
-  // function ActionsCell(params) {
-  //   const handleEdit = React.useCallback(() => {
-  //     navigate(`/edit/${params.row.id}`);
-  //     // Xử lý sự kiện chỉnh sửa
-  //     console.log(`Chỉnh sửa hàng với ID: ${params.row.id}`);
-  //   }, []);
-
-  //   const handleDelete = React.useCallback(() => {
-  //     // Xử lý sự kiện xóa
-  //     console.log(`Xóa hàng với ID: ${params.row.id}`);
-  //   }, []);
-
-  //   return (
-  //     <div>
-  //       <IconButton onClick={handleEdit}>
-  //         <EditIcon />
-  //       </IconButton>
-  //       <IconButton onClick={handleDelete}>
-  //         <DeleteIcon />
-  //       </IconButton>
-  //     </div>
-  //   );
-  // }
+  // const handleEdit = useCallback(
+  //   (id) => {
+  //     console.log("id là:", id);
+  //     navigate(`/edit/${id}`);
+  //   },
+  //   [navigate]
+  // );
+  const handleDelete = (id) => {
+    console.log("id cần xóa là:", id);
+  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
@@ -67,9 +54,11 @@ export default function ProjectManagement() {
       renderCell: (params) => (
         <Stack direction="row">
           {params.value.map((item) => (
-            <Member>{item}</Member>
+            <AvatarGroup max={3}>
+              <Member>{item}</Member>
+            </AvatarGroup>
           ))}
-          <Member>{"..."}</Member>
+
           <MemberAdd>+</MemberAdd>
         </Stack>
       ),
@@ -81,24 +70,16 @@ export default function ProjectManagement() {
       with: 100,
       renderCell: (params) => (
         <div>
-          <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
+          <IconButton onClick={navigate(`/edit/${params.row.id}`)}>
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
+          <IconButton>
             <DeleteIcon />
           </IconButton>
         </div>
       ),
     },
   ];
-
-  const handleEdit = (id) => {
-    console.log("id là:", id);
-    navigate(`/edit/${id}`);
-  };
-  const handleDelete = (id) => {
-    console.log("id cần xóa là:", id);
-  };
 
   console.log("data", allProject);
   if (isLoading) {
@@ -111,7 +92,7 @@ export default function ProjectManagement() {
         columns={columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 9 },
+            paginationModel: { page: 0, pageSize: 10 },
           },
         }}
         // pageSizeOptions={[9, 10]}
