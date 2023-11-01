@@ -23,3 +23,15 @@ export async function getProjectDetail(projectId) {
     throw error.response.data?.content;
   }
 }
+
+export const deleteProject = async (projectId) => {
+  try {
+    const response = await fetcher.delete("/Project/deleteProject", {
+      params: {
+        projectId: projectId,
+      },
+    });
+  } catch (error) {
+    throw error.response.data;
+  }
+};
