@@ -1,5 +1,5 @@
-import React from "react";
-import Box from "@mui/material/Box";
+import React, { useEffect } from "react";
+import { Box, Avatar, Button } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -8,9 +8,6 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-
-import ListItemText from "@mui/material/ListItemText";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -21,24 +18,40 @@ import FolderIcon from "@mui/icons-material/Folder";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import { Text, NavListButton } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../contexts/UserContext/UserContext";
+import avt from "../../assets/img/meme-khoc_33.webp";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-const drawerWidth = 300;
+const drawerWidth = 270;
 
 export default function Navbar() {
+  const { currentUser, handleSignout } = useUserContext();
   const navigate = useNavigate();
+  // useEffect(() => {
+  //   // hàm gì đó
+
+  //   handleGohome();
+  // }, []);
+
+  const handleSignin = () => {
+    navigate(`/sign-in`);
+  };
+  const handleSignup = () => {
+    navigate(`/sign-up`);
+  };
+  const handleGohome = () => {
+    navigate(`/`);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Permanent drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      ></AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -51,7 +64,43 @@ export default function Navbar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar>hehe</Toolbar>
+        <Toolbar>
+          {currentUser && (
+            <Box>
+              <Button>
+                <Avatar src={avt}>{currentUser.hoTen}</Avatar>
+              </Button>
+              <Button
+                sx={{ fontSize: "0.675rem" }}
+                variant="outlined"
+                onClick={handleSignout}
+              >
+                <LogoutIcon />
+                Đăng Xuất
+              </Button>
+            </Box>
+          )}{" "}
+          {!currentUser && (
+            <Box>
+              <Button
+                sx={{ margin: 1, fontSize: "0.8" }}
+                onClick={handleSignin}
+                variant="outlined"
+                startIcon={<LoginIcon />}
+              >
+                Đăng nhập
+              </Button>
+              <Button
+                sx={{ margin: 1, fontSize: "0.8" }}
+                onClick={handleSignup}
+                variant="outlined"
+                startIcon={<HowToRegIcon />}
+              >
+                Đăng Ký
+              </Button>
+            </Box>
+          )}
+        </Toolbar>
         <Divider />
         <List>
           <ListItem disablePadding>
@@ -62,7 +111,7 @@ export default function Navbar() {
             </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <NavListButton onClick={navigate("/")}>
+            <NavListButton onClick={handleGohome}>
               <Text>
                 <SettingsIcon sx={{ marginRight: 2 }} /> Project Management
               </Text>

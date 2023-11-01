@@ -9,7 +9,7 @@ import { useUserContext } from "../../../contexts/UserContext/UserContext";
 import avt from "../../../assets/img/meme-khoc_33.webp";
 import bg from "../../../assets/img/bg-signin.jpg";
 import Swal from "sweetalert2";
-import { Grid, Paper, Typography, TextField, Alert } from "@mui/material";
+import { Grid, Paper, Typography, TextField } from "@mui/material";
 import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./styles";
 
 const signinSchema = object({
@@ -57,6 +57,7 @@ export default function Signin() {
 
   // currentUser khác null => user đã đăng nhập => điều hướng về Home
   if (currentUser) {
+    console.log("đã đăng nhập");
     const redirectTo = searchParams.get("redirectTo");
     return <Navigate to={redirectTo || "/"} replace />;
   }
@@ -106,6 +107,7 @@ export default function Signin() {
               fullWidth
               variant="contained"
               color="primary"
+              disabled={isLoading}
             >
               Đăng nhập
             </CusButton>
@@ -115,35 +117,4 @@ export default function Signin() {
       </Grid>
     </Grid>
   );
-  // <div >
-
-  {
-    /* <h1>Signin</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input placeholder="Tài Khoản" {...register("taiKhoan")} />
-          {errors.taiKhoan && <p>{errors.taiKhoan.message}</p>}
-        </div>
-
-        <div>
-          <input
-            type="password"
-            placeholder="Mật khẩu"
-            {...register("matKhau")}
-          />
-          {errors.matKhau && <p>{errors.matKhau.message}</p>}
-        </div>
-
-        <button type="submit" disabled={isLoading}>
-          Đăng Nhập
-        </button>
-
-        {error && <p>{error}</p>}
-      </form> */
-  }
-  {
-    /* </div> */
-  }
-  // );
 }

@@ -1,13 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getProjectDetail, getProjectEdit } from "../../apis/projectAPI";
+import { useQuery } from "@tanstack/react-query";
+import { getProjectDetail } from "../../apis/projectAPI";
+import { useParams } from "react-router-dom";
 
 export default function EditProject() {
-  const projectId = 13461;
-  const { data: projectDetail = [] } = useQuery({
-    queryKey: ["projectId", projectId],
-    queryFn: () => getProjectDetail(projectId),
-  });
-  console.log("detail:", projectDetail);
+  const { projectId } = useParams();
+  console.log("projectId", projectId);
+  // const { data: projectDetail = [] } = useQuery({
+  //   queryKey: ["id".projectId],
+  //   queryFn: () => getProjectDetail(projectId),
+  // });
+  // console.log("projectDetail", projectDetail);
   return <div>EditProject</div>;
 }
