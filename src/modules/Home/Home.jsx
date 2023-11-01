@@ -1,38 +1,62 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@tanstack/react-query";
-import { getAllProject } from "../../apis/projectAPI";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteProject, getAllProject } from "../../apis/projectAPI";
 import Loading from "../../components/Loading/Loading";
-import { AvatarGroup, Stack } from "@mui/material";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
-
-import { Creator, Member, MemberAdd } from "./style";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import {
+  Avatar,
+  AvatarGroup,
+  IconButton,
+  Tooltip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Stack,
+} from "@mui/material";
+import Swal from "sweetalert2";
+import { Creator, MemberAdd } from "./style";
 import { useNavigate } from "react-router-dom";
+
+import Zoom from "@mui/material/Zoom";
 
 export default function Home() {
   const navigate = useNavigate();
-
-  const handleEdit = useCallback((id) => {
-    console.log("id là:", id);
-    navigate(`/edit/${id}`);
-  });
-
-  const handleDelete = (id) => {
-    console.log("id cần xóa là:", id);
-  };
-
-  // useEffect(() => {
-  //   handleEdit();
-  //   handleDelete();
-  // }, []);
-
+  const queryClient = useQueryClient();
   const { data: allProject = [], isLoading } = useQuery({
     queryKey: ["project"],
     queryFn: getAllProject,
   });
+
+  const { mutate: handleDeleteProject } = useMutation({
+    mutationFn: (id) => {
+      return deleteProject(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project"] });
+    },
+  });
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: `Bạn muốn xóa tài khoản ${id}?`,
+      showCancelButton: true,
+      cancelButtonText: "Hủy",
+      confirmButtonText: "Xác nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteProject(id);
+        Swal.fire("Đã xóa!", "", "success");
+      }
+    });
+  };
 
   console.log("data:", allProject);
 
@@ -53,27 +77,65 @@ export default function Home() {
       ),
       cellClassName: "creator",
     },
-
+    // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     {
       field: "members",
       headerName: "Member",
       width: 260,
-      valueGetter: (params) =>
-        params.row.members.map((user) => user.name.charAt(0).toUpperCase()),
       renderCell: (params) => (
-        <Stack direction="row">
-          <AvatarGroup max={3}>
-            {params.value.map((item, index) => (
-              <Member key={index} alt={item.name} />
-            ))}
-          </AvatarGroup>
-
-          <MemberAdd>+</MemberAdd>
-        </Stack>
+        <Tooltip
+          style={{ maxWidth: "200px" }}
+          TransitionComponent={Zoom}
+          title={
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Avatar</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {params.value.map((member) => (
+                    <TableRow>
+                      <TableCell>{member.userId}</TableCell>
+                      <TableCell>
+                        <Avatar
+                          sx={{ width: 20, height: 20 }}
+                          src={member.avatar}
+                        />
+                      </TableCell>
+                      <TableCell>{member.name}</TableCell>
+                      <TableCell>
+                        <HighlightOffIcon />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          }
+        >
+          <Stack direction="row">
+            <AvatarGroup max={3}>
+              {params.value.map((member) => (
+                <Avatar
+                  key={member.userId}
+                  alt={member.name}
+                  src={member.avatar}
+                />
+              ))}
+            </AvatarGroup>
+            <MemberAdd>+</MemberAdd>
+          </Stack>
+        </Tooltip>
       ),
+
       cellClassName: "member",
     },
-
+    // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     {
       field: "action",
       headerName: "Action",
@@ -83,7 +145,7 @@ export default function Home() {
           <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
             <EditIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
         </div>
@@ -106,7 +168,7 @@ export default function Home() {
             paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        // pageSizeOptions={[9, 10]}
+        pageSizeOptions={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
         checkboxSelection={false}
       />
     </div>
