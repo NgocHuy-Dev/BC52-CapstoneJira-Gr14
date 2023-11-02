@@ -5,6 +5,7 @@ import SignIn from "./modules/Auth/Sign-in";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EditProject from "./modules/EditProject/EditProject";
 import ProtectedRoute from "./Routers/ProtectedRoute/ProtectedRoute";
+import Signup from "./modules/Auth/Sign-up/Signup";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           </Route>
 
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>

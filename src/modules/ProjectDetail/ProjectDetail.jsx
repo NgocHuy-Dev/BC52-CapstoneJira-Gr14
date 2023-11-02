@@ -1,5 +1,6 @@
+import { Container } from "@mui/material";
 import React from "react";
 
 export default function ProjectDetail() {
-  return <div>ProjectDetail</div>;
+  return <Container></Container>;
 }

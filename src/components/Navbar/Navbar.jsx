@@ -121,35 +121,35 @@ export default function Navbar() {
         </List>
         <Divider />
         <List>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <LocalShippingIcon sx={{ marginRight: 2 }} /> Release
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <LineStyleIcon sx={{ marginRight: 2 }} /> Issues and fillter
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <NoteAltIcon sx={{ marginRight: 2 }} /> Pages
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <NearMeIcon sx={{ marginRight: 2 }} /> Report
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <FolderIcon sx={{ marginRight: 2 }} /> Components
