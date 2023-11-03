@@ -4,5 +4,5 @@ import { Box } from "@mui/material";
 export const EditBox = styled(Box)`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 `;

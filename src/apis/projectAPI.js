@@ -17,13 +17,16 @@ export async function getProjectDetail(projectId) {
         id: projectId,
       },
     });
-
-    // edit project
-
     return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;
   }
+}
+
+// edit project
+export async function updateProject(projectId) {
+  try {
+  } catch (error) {}
 }
 
 // xóa project

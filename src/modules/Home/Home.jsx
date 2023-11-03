@@ -85,7 +85,7 @@ export default function Home() {
       width: 260,
       renderCell: (params) => (
         <Tooltip
-          style={{ maxWidth: "200px" }}
+          style={{ overflowX: "hidden" }}
           TransitionComponent={Zoom}
           title={
             <TableContainer>
