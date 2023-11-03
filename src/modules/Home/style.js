@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Avatar, Button } from "@mui/material";
-import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 
 export const Creator = styled(Button)`
   color: rgb(11, 207, 11);
@@ -23,11 +22,3 @@ export const MemberAdd = styled(Avatar)`
   border: 1px solid rgb(11, 207, 11);
   cursor: pointer;
 `;
-
-const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))({
-  [`& .${tooltipClasses.tooltip}`]: {
-    maxWidth: 500,
-  },
-});

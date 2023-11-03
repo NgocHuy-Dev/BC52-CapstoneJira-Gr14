@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { object, string } from "yup";
 import { signin } from "../../../apis/userAPI";
 import { useUserContext } from "../../../contexts/UserContext/UserContext";
@@ -22,6 +22,7 @@ const signinSchema = object({
 });
 
 export default function Signin() {
+  const navigate = useNavigate();
   const { currentUser, handleSignin: onSigninSuccess } = useUserContext();
 
   const [searchParams] = useSearchParams();
@@ -47,6 +48,10 @@ export default function Signin() {
     mutationFn: (payload) => signin(payload),
     onSuccess: (data) => {
       onSigninSuccess(data);
+    },
+    onError: (error) => {
+      Swal.fire("Lỗi!", error.message);
+      navigate("/sign-in");
     },
   });
 

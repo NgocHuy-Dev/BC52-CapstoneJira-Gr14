@@ -23,7 +23,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-const drawerWidth = 270;
+const drawerWidth = "20%";
 
 export default function Navbar() {
   const { currentUser, handleSignout } = useUserContext();
@@ -49,6 +49,7 @@ export default function Navbar() {
       <Drawer
         sx={{
           width: drawerWidth,
+          minWidth: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
@@ -121,35 +122,35 @@ export default function Navbar() {
         </List>
         <Divider />
         <List>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <LocalShippingIcon sx={{ marginRight: 2 }} /> Release
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <LineStyleIcon sx={{ marginRight: 2 }} /> Issues and fillter
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <NoteAltIcon sx={{ marginRight: 2 }} /> Pages
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <NearMeIcon sx={{ marginRight: 2 }} /> Report
               </Text>
             </NavListButton>
           </ListItem>
-          <ListItem>
+          <ListItem disablePadding>
             <NavListButton>
               <Text>
                 <FolderIcon sx={{ marginRight: 2 }} /> Components

@@ -46,7 +46,7 @@ export default function Home() {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: `Bạn muốn xóa tài khoản ${id}?`,
+      title: `Bạn muốn xóa Project  ${id}?`,
       showCancelButton: true,
       cancelButtonText: "Hủy",
       confirmButtonText: "Xác nhận",
@@ -57,6 +57,7 @@ export default function Home() {
       }
     });
   };
+  // const handleDeleteMember = (userId = {});
 
   console.log("data:", allProject);
 
@@ -84,7 +85,7 @@ export default function Home() {
       width: 260,
       renderCell: (params) => (
         <Tooltip
-          style={{ maxWidth: "200px" }}
+          style={{ overflowX: "hidden" }}
           TransitionComponent={Zoom}
           title={
             <TableContainer>
