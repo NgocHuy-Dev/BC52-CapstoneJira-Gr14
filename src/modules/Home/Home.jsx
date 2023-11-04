@@ -20,6 +20,7 @@ import {
   TableHead,
   TableRow,
   Stack,
+  Box,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { Creator, MemberAdd } from "./style";
@@ -142,14 +143,14 @@ export default function Home() {
       headerName: "Action",
       with: 100,
       renderCell: (params) => (
-        <div>
+        <Box>
           <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
             <EditIcon />
           </IconButton>
           <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
-        </div>
+        </Box>
       ),
     },
   ];
@@ -157,11 +158,16 @@ export default function Home() {
   if (isLoading) {
     return <Loading />;
   }
+
+  const handleCellClick = (params) => {
+    navigate(`/projectdetail/${params.row.id}`);
+  };
   return (
     <div
       style={{ height: 580, width: "97%", marginLeft: "2%", marginRight: "1%" }}
     >
       <DataGrid
+        onCellClick={handleCellClick}
         rows={allProject}
         columns={columns}
         initialState={{
