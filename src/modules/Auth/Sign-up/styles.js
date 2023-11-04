@@ -1,53 +1,33 @@
-
-import {
-  Avatar,
-  Button,
-  FormControl,
-  Paper,
-  Alert,
-  Typography,
-} from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-
+import { Avatar, Paper, Button, Typography } from "@mui/material";
 
 export const CusImage = styled(Avatar)`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
+  margin-top: 5px;
 `;
 export const CusBackGr = styled(Avatar)`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   width: 100%;
-  height: 80%;
+  height: 100%;
 `;
-
 export const CusPaper = styled(Paper)`
-  margin: 0px 16px;
-  padding: 10px 10px;
+  margin: 5px 16px;
+  padding: 0px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-
-export const CusAvatar = styled(Avatar)`
-  margin: 8px;
-  background-color: #f50057;
-`;
-
-export const CusForm = styled(FormControl)`
-  width: 100%;
-  margin-top: 8px;
-`;
-
 export const CusButton = styled(Button)`
   margin: 24px 0 16px;
+  background-color: green;
 `;
 
-export const CusAlert = styled(Typography)`
+export const Alert = styled(Typography)`
   color: red;
 `;

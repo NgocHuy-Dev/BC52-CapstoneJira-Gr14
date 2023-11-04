@@ -9,11 +9,8 @@ import { useUserContext } from "../../../contexts/UserContext/UserContext";
 import avt from "../../../assets/img/meme-khoc_33.webp";
 import bg from "../../../assets/img/bg-signin.jpg";
 import Swal from "sweetalert2";
-import { Grid, Paper, Typography, TextField, Box, Button } from "@mui/material";
+import { Grid, Paper, Typography, TextField } from "@mui/material";
 import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./styles";
-
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
 
 const signinSchema = object({
   email: string().required("Emal không được để trống"),
@@ -121,62 +118,6 @@ export default function Signin() {
             </CusButton>
             {error && <CusAlert variant="a">{errors}</CusAlert>}
           </form>
-          {/* Button Signgup */}
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            mt={2}
-            xs={12}
-            sm={12}
-            md={6}
-            lg={6}
-            xl={6}
-          >
-            <Typography fontSize={13}>
-              Do not have an account?
-              <Button
-                type="button"
-                onClick={() => {
-                  navigate("/sign-up");
-                }}
-              >
-                <Typography fontSize={13} textTransform={"none"}>
-                  {" "}
-                  Signup now
-                </Typography>
-              </Button>
-            </Typography>
-          </Box>
-          {/* Button Login with Social */}
-
-          <Box
-            display={"flex"}
-            justifyContent={"center"}
-            mt={2}
-            xs={12}
-            sm={12}
-            md={6}
-            lg={6}
-            xl={6}
-          >
-            <Button
-              type="button"
-              onClick={() => {
-                navigate("/loginfb");
-              }}
-            >
-              <FacebookIcon />
-            </Button>
-
-            <Button
-              type="button"
-              onClick={() => {
-                navigate("/loginfb");
-              }}
-            >
-              <TwitterIcon />
-            </Button>
-          </Box>
         </CusPaper>
       </Grid>
     </Grid>

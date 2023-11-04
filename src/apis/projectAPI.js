@@ -23,29 +23,6 @@ export async function getProjectDetail(projectId) {
   }
 }
 
-// Create project
-export async function getProjectCategory() {
-  try {
-    const response = await fetcher.get("/ProjectCategory");
-
-    return response.data?.content;
-  } catch (error) {
-    throw error.response.data?.content;
-  }
-}
-
-export async function createProject(payload) {
-  try {
-    const response = await fetcher.post("/createProjectAuthorize", payload);
-    // thêm ? optional chaining vào data để kiểm tra có dữ liệu thì trả chứ không báo lỗi
-    return response.data?.content;
-  } catch (error) {
-    throw error.response.data?.content;
-  }
-}
-
-// Create project
-
 // edit project
 export async function updateProject(projectId) {
   try {
