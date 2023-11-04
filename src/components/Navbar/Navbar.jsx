@@ -113,7 +113,7 @@ export default function Navbar() {
             </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <NavListButton>
+            <NavListButton onClick={() => navigate("/createproject")}>
               <Text>
                 <CreateIcon sx={{ marginRight: 2 }} /> Create Project
               </Text>
