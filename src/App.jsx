@@ -5,8 +5,12 @@ import SignIn from "./modules/Auth/Sign-in";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EditProject from "./modules/EditProject/EditProject";
 import ProtectedRoute from "./Routers/ProtectedRoute/ProtectedRoute";
-import Signup from "./modules/Auth/Sign-up/Signup";
+// import Signup from "./modules/Auth/Sign-up/Signup";
+import Signup from "./modules/Auth/Signup/Signup";
 import ProjectDetail from "./modules/ProjectDetail/ProjectDetail";
+import CreateProject from "./modules/CreateProject";
+import LoginFb from "./modules/Auth/FacebookLogin/LoginFb";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
   return (
@@ -16,7 +20,11 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<ProjectLayout />}>
               <Route index element={<Home />} />
-              <Route path="/projectdetail" element={<ProjectDetail />} />
+              <Route
+                path="/projectdetail/:projectId"
+                element={<ProjectDetail />}
+              />
+              <Route path="/createproject" element={<CreateProject />} />
             </Route>
             <Route path="/edit/:projectId" element={<EditProject />} />
           </Route>
