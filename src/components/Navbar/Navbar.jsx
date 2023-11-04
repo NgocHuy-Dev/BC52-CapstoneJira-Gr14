@@ -23,7 +23,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-const drawerWidth = "20%";
+const drawerWidth = 270;
 
 export default function Navbar() {
   const { currentUser, handleSignout } = useUserContext();
