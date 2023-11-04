@@ -23,7 +23,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-const drawerWidth = 270;
+const drawerWidth = "20%";
 
 export default function Navbar() {
   const { currentUser, handleSignout } = useUserContext();
@@ -113,7 +113,7 @@ export default function Navbar() {
             </NavListButton>
           </ListItem>
           <ListItem disablePadding>
-            <NavListButton onClick={() => navigate("/createproject")}>
+            <NavListButton>
               <Text>
                 <CreateIcon sx={{ marginRight: 2 }} /> Create Project
               </Text>

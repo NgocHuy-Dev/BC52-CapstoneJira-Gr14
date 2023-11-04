@@ -1,11 +1,7 @@
 import React from "react";
 import Card from "@mui/material/Card";
-
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import AddCardIcon from "@mui/icons-material/AddCard";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 export default function Task() {
   return (
