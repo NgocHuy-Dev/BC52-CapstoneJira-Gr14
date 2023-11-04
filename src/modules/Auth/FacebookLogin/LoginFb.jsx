@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { TextField, Button, IconButton, FormControl, Box } from "@mui/material";
 import { FormControlStyle, Background } from "./LoginFb.styles";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -93,7 +93,7 @@ export default function LoginFb() {
               }}
             />
 
-            <FacebookLogin
+            {/* <FacebookLogin
               appId="your-app-id"
               fields="name,email,picture"
               callback={responseFacebook}
@@ -108,7 +108,7 @@ export default function LoginFb() {
                   Đăng nhập với Facebook
                 </Button>
               )}
-            />
+            /> */}
           </Box>
         </FormControl>
       </FormControlStyle>
