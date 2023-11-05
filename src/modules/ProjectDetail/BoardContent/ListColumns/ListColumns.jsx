@@ -1,10 +1,15 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
-
 import Column from "./Column";
+import { Button, Tooltip } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
-export default function ListColumns() {
+export default function ListColumns({ column }) {
   return (
     <Box
       sx={{
@@ -21,10 +26,31 @@ export default function ListColumns() {
     >
       {/* ADD THÊM COLUMN Ở ĐÂY  */}
       <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
+
+      <Tooltip title="Create column">
+        <Box
+          sx={{
+            minWidth: "50px",
+            maxWidth: "50px",
+            mx: 2,
+            borderRadius: "6px",
+            height: "fit-content",
+            bgcolor: "#ffffff3d",
+          }}
+        >
+          <Button
+            startIcon={<AddIcon />}
+            sx={{
+              color: "white",
+              width: "100%",
+              height: "100%",
+              justifyContent: "flex-start",
+              pl: 2.5,
+              py: 1.5,
+            }}
+          ></Button>
+        </Box>
+      </Tooltip>
     </Box>
   );
 }

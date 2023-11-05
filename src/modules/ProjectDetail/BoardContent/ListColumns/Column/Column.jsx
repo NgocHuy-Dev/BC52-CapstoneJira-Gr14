@@ -53,9 +53,9 @@ export default function Column() {
           justifyContent: "space-between",
         }}
       >
-        <Button startIcon={<AddCardIcon />}>Add new card</Button>
+        <Button startIcon={<AddCardIcon />}>Create issue</Button>
         <Tooltip title="Drag to move">
-          <DragHandleIcon sx={{ cursor: "pointer" }} />
+          <DragHandleIcon sx={{ cursor: "grab" }} />
         </Tooltip>
       </Box>
     </Box>

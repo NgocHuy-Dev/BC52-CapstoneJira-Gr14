@@ -136,21 +136,21 @@ export default function CreateProject() {
     onSuccess: () => {
       navigate("/createproject");
     },
+    onError: () => {
+      Swal.fire("lỗi tè le hột me rồi");
+    },
   });
 
   const onSubmit = (dataSubmit) => {
     // clean special value
-    const cleanedData = Object.fromEntries(
-      Object.entries(dataSubmit).map(([key, value]) => {
-        if (typeof value === "string") {
-          return [key, value.replace(/<p>/g, "").replace(/<\/p>/g, "")];
-        }
-        return [key, value];
-      })
-    );
-    console.log(cleanedData);
 
-    handleCreate(cleanedData);
+    const newDes = dataSubmit.description
+      .replace(/<p>/g, "")
+      .replace(/<\/p>/g, "");
+
+    const formatedValue = { ...dataSubmit, description: newDes };
+    handleCreate(formatedValue);
+
     Swal.fire("Tạo dự án thành công!", "", "success");
   };
 
@@ -177,12 +177,23 @@ export default function CreateProject() {
           {errors.projectName && (
             <CusAlert variant="a">{errors.projectName.message}</CusAlert>
           )}
+
           <InputLabel style={{ marginTop: "22px" }}>Description</InputLabel>
           <QuillEditor name="description" control={control} />
           {errors.description && <p>{errors.description.message}</p>}
           <InputLabel style={{ marginTop: "22px" }}>
             Project Category
           </InputLabel>
+
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Alias"
+            name="alias"
+            autoFocus
+            {...register("alias")}
+          />
 
           <Select {...register("categoryId")} fullWidth>
             {projectCategory.map((option) => {

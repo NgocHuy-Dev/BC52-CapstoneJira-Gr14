@@ -57,7 +57,12 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: { "&.MuiTypography-body1": { fontSize: "0.875rem" } },
+        root: {
+          "&.MuiTypography-body1": {
+            fontSize: "0.875rem",
+          },
+          textTransform: "inherit",
+        },
       },
     },
   },

@@ -14,8 +14,12 @@ import GroupIcon from "@mui/icons-material/Group";
 import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import ListColumns from "./ListColumns/ListColumns";
+import { DndContext } from "@dnd-kit/core";
 
 export default function BoardContent() {
+  const handleDragEnd = (event) => {
+    console.log("handleDragEnd", event);
+  };
   return (
     <Box
       sx={{
