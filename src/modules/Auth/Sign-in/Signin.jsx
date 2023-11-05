@@ -17,11 +17,12 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 
 const signinSchema = object({
   email: string().required("Emal không được để trống"),
-  passWord: string().required("Mật khẩu không được để trống"),
-  // .matches(
-  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-  //   "Mật khẩu ít nhất 8 kí tự, 1 kí tự hoa, 1 kí tự thường và 1 số"
-  // ),
+  passWord: string()
+    .required("Mật khẩu không được để trống")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+      "Mật khẩu ít nhất 8 kí tự, 1 kí tự hoa, 1 kí tự thường và 1 số"
+    ),
 });
 
 export default function Signin() {
@@ -52,9 +53,8 @@ export default function Signin() {
     onSuccess: (data) => {
       onSigninSuccess(data);
     },
-    onError: (error) => {
-      Swal.fire("Lỗi!", error.message);
-      navigate("/sign-in");
+    onError: () => {
+      Swal.fire("Lỗi!");
     },
   });
 

@@ -201,14 +201,8 @@ export default function Signup() {
             >
               <Typography fontSize={13}>
                 Already have an account?
-                <Button
-                  type="button"
-                  onClick={() => {
-                    navigate("/sign-in");
-                  }}
-                >
+                <Button type="button" onClick={() => navigate("/sign-in")}>
                   <Typography fontSize={13} textTransform={"none"}>
-                    {" "}
                     Signin now
                   </Typography>
                 </Button>

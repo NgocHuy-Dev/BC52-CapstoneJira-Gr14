@@ -9,7 +9,6 @@ const fetcher = axios.create({
   },
 });
 
-//REquest interceptor
 fetcher.interceptors.request.use((request) => {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (user) {
@@ -21,10 +20,12 @@ fetcher.interceptors.request.use((request) => {
 // Response
 fetcher.interceptors.response.use(
   (response) => {
+    //thay đỏi respone trước khi trả về
+    //return response.data.content
     return response;
   },
   (error) => {
-    // Kiểm tra trả lỗi 401 => token ko hợp lệ => đĂNG xuất
+    //Kiểm tra nếu lỗi là 401 => token ko hợp lệ => đăng xuất user
     if (error.response.status === 401) {
       localStorage.removeItem("currentUser");
       window.location.replace("/sign-in");

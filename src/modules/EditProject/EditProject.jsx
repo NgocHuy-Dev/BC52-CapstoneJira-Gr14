@@ -113,18 +113,6 @@ export default function EditProject() {
             helperText={errors.projectName?.message}
             fullWidth
           />
-          {/* <TextField
-            sx={{ maxWidth: "28%" }}
-            variant="outlined"
-            margin="normal"
-            {...register("categoryName")}
-            name="categoryName"
-            label="Tên danh mục"
-            // defaultValue={categoryName}
-            error={!!errors.categoryName}
-            helperText={errors.categoryName?.message}
-            fullWidth
-          /> */}
 
           <Box sx={{ minWidth: "28%", marginBottom: "8px", marginTop: "16px" }}>
             <FormControl fullWidth>

@@ -36,7 +36,10 @@ export async function getProjectCategory() {
 
 export async function createProject(payload) {
   try {
-    const response = await fetcher.post("/createProjectAuthorize", payload);
+    const response = await fetcher.post(
+      "/Project/createProjectAuthorize",
+      payload
+    );
     // thêm ? optional chaining vào data để kiểm tra có dữ liệu thì trả chứ không báo lỗi
     return response.data?.content;
   } catch (error) {
