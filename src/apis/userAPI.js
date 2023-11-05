@@ -17,3 +17,17 @@ export const signup = async (payload) => {
     throw error.response.data?.content;
   }
 };
+
+export async function getUser(name) {
+  try {
+    const response = await fetcher.get("Users/getUser", {
+      params: {
+        keyword: name,
+      },
+    });
+
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
