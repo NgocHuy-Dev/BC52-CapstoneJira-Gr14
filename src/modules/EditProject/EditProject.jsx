@@ -30,16 +30,7 @@ const editProjectSchema = object({
 export default function EditProject() {
   const { projectId } = useParams();
   const queryClient = useQueryClient();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({
-    resolver: yupResolver(editProjectSchema),
-    mode: "onTouched",
-  });
+  const [name, setName] = useState(""); // state của select
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["projectId", projectId],
@@ -47,47 +38,48 @@ export default function EditProject() {
   });
 
   console.log("data edit", data);
-
-  // LƯU Ý CÁI này
   if (Object.keys(data).length > 0) {
     console.log("ctegery Name", data.projectCategory.name);
   }
-  // LƯU Ý CÁI này
 
-  const nameOfCategory = data.projectCategory?.name;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    defaultValues: {
+      id: data.id,
+      projectName: data.projectName,
+      creator: 0,
+      description: data.description,
+      categoryId: 0,
+    },
+    resolver: yupResolver(editProjectSchema),
+    mode: "onTouched",
+  });
 
-  useEffect(() => {
-    setValue("id", data.id);
-    setValue("projectName", data.projectName);
-    setValue("projectCategory", data.projectCategory);
-    setValue("description", data.description);
-  }, [setValue]);
-
-  const [name, setName] = useState(nameOfCategory); // state của select
-  // KO ĐƯỢC XÓA
-  const { mutate: handleUpdate } = useMutation({
-    mutationFn: (formData) => {
-      return updateProject(formData);
+  const { mutate: onSubmit } = useMutation({
+    mutationFn: (values) => {
+      console.log("data submit", values);
+      return updateProject(values);
     },
     onSuccess: () => {
-      Swal.fire("Thành Công!", "Đã cập nhật thông tin người dùng", "success");
-      queryClient.invalidateQueries({ queryKey: ["project"] });
+      Swal.fire("Thành Công!", "Đã cập nhật thông tin Project", "success");
+      queryClient.invalidateQueries({ queryKey: ["projectId"] });
     },
   });
+
+  // useEffect(() => {
+  //   setValue("id", data.id);
+  //   setValue("projectName", data.projectName);
+  //   setValue("projectCategory", data.projectCategory);
+  //   setValue("description", data.description);
+  // }, [setValue]);
+
   // KO ĐƯỢC XÓA
 
-  const onSubmit = (value) => {
-    console.log("update Project", value);
-  };
-
-  // if (!data) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // const { id, projectName, description, categoryName } = data[0];
-
   // ======= xử lý Select  =====================
-
   const handleChange = (event) => {
     setName(event.target.value);
   };
@@ -111,8 +103,8 @@ export default function EditProject() {
               margin="normal"
               name="id"
               // label="Project ID"
-              value={data.id}
               disabled
+              {...register("id")}
             />
           </Box>
           <Box sx={{ maxWidth: "28%" }}>
@@ -121,10 +113,12 @@ export default function EditProject() {
               variant="outlined"
               margin="normal"
               {...register("projectName")}
-              name="projectName"
+              onChange={() => setValue}
+              errors
+              // name="projectName"
               // label="Project Name"
-              value={data.projectName}
-              error={!!errors.projectName}
+              // value={data.projectName}
+              // error={!!errors.projectName}
               helperText={errors.projectName?.message}
               fullWidth
             />
@@ -136,9 +130,12 @@ export default function EditProject() {
                 labelId="projectCategory"
                 onChange={handleChange}
                 id="projectCategory"
-                defaultValue={data.projectCategory?.name}
+                // defaultValue={data.projectCategory?.name}
+                value={name} // chô này set giá trị ban đầu của state là 1 trong những value của Select
+                {...register("categoryId")}
                 sx={{ width: "200px" }}
               >
+                {/* <MenuItem value="">{data.projectCategory.name}</MenuItem> */}
                 <MenuItem value="Dự án phần mềm">Dự án phần mềm</MenuItem>
                 <MenuItem value="Dự án web">Dự án web</MenuItem>
                 <MenuItem value="Dự án di động">Dự án di động</MenuItem>
@@ -149,9 +146,9 @@ export default function EditProject() {
         <Box sx={{ marginBottom: "15px" }}>
           <Editor
             apiKey="rfmzf1ezo0i5w87f9fm8q1hk5rzfwi29ak9grgk8bnhden57"
-            onInit={(evt, editor) => (editorRef.current = editor)}
-            id="description"
-            value={data.description}
+            // onInit={(evt, editor) => (editorRef.current = editor)}
+            // id="description"
+            // value={data.description}
             onEditorChange={(content) => {
               setValue("description", content);
             }}
