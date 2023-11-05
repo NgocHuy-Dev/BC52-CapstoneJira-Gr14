@@ -21,6 +21,7 @@ import {
   TableRow,
   Stack,
   Box,
+  Typography,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { Creator, MemberAdd } from "./style";
@@ -65,9 +66,26 @@ export default function Home() {
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
 
-    { field: "projectName", headerName: "Project Name", width: 200 },
+    {
+      field: "projectName",
+      headerName: "Project Name",
+      width: 200,
+      renderCell: (params) => (
+        <Tooltip
+          title="Show Detail"
+          sx={{ cursor: "pointer" }}
+          onClick={() => navigate(`/projectdetail/${params.row.id}`)}
+        >
+          <Typography>{params.row.projectName}</Typography>
+        </Tooltip>
+      ),
+    },
 
-    { field: "categoryName", headerName: "Category", width: 200 },
+    {
+      field: "categoryName",
+      headerName: "Category",
+      width: 200,
+    },
 
     {
       field: "creator",
@@ -130,7 +148,9 @@ export default function Home() {
                 />
               ))}
             </AvatarGroup>
-            <MemberAdd>+</MemberAdd>
+            <Tooltip title="Add Member">
+              <MemberAdd>+</MemberAdd>
+            </Tooltip>
           </Stack>
         </Tooltip>
       ),
@@ -143,13 +163,17 @@ export default function Home() {
       headerName: "Action",
       with: 100,
       renderCell: (params) => (
-        <Box>
-          <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon />
-          </IconButton>
+        <Box sx={{ zIndex: "10000" }}>
+          <Tooltip title="Edit Project">
+            <IconButton onClick={() => navigate(`/edit/${params.row.id}`)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete Project">
+            <IconButton onClick={() => handleDelete(params.row.id)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       ),
     },
@@ -159,15 +183,15 @@ export default function Home() {
     return <Loading />;
   }
 
-  const handleCellClick = (params) => {
-    navigate(`/projectdetail/${params.row.id}`);
-  };
+  // const handleCellClick = (params) => {
+  //   navigate(`/projectdetail/${params.row.id}`);
+  // };
   return (
     <div
       style={{ height: 580, width: "97%", marginLeft: "2%", marginRight: "1%" }}
     >
       <DataGrid
-        onCellClick={handleCellClick}
+        // onCellClick={handleCellClick}
         rows={allProject}
         columns={columns}
         initialState={{
