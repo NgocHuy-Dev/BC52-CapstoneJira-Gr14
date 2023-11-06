@@ -10,7 +10,8 @@ import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import Task from "./Task/Task";
 
-export default function ListTasks() {
+export default function ListTasks({ listTasks }) {
+  console.log("list Task???", listTasks);
   return (
     <Box
       sx={{
@@ -58,16 +59,11 @@ export default function ListTasks() {
         </CardActions>
       </Card>
       {/* LIST TASK  */}
+      {listTasks?.map((task) => (
+        <Task key={task.taskId} task={task} />
+      ))}
       <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
-      <Task />
+
       {/* LIST TASK  */}
     </Box>
   );

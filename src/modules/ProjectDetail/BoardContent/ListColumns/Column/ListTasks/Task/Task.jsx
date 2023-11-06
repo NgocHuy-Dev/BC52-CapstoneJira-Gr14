@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-export default function Task() {
+export default function Task({ task }) {
   return (
     <Card
       sx={{

@@ -9,7 +9,7 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-export default function ListColumns({ column }) {
+export default function ListColumns({ lstTask }) {
   return (
     <Box
       sx={{
@@ -25,7 +25,9 @@ export default function ListColumns({ column }) {
       }}
     >
       {/* ADD THÊM COLUMN Ở ĐÂY  */}
-      <Column />
+      {lstTask?.map((tasks) => (
+        <Column key={tasks.statusId} tasks={tasks} />
+      ))}
 
       <Tooltip title="Create column">
         <Box

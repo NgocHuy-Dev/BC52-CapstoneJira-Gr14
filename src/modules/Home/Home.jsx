@@ -59,9 +59,6 @@ export default function Home() {
       }
     });
   };
-  // const handleDeleteMember = (userId = {});
-
-  console.log("data:", allProject);
 
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
