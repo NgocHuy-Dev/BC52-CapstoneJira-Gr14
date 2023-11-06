@@ -8,12 +8,13 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListTasks from "./ListTasks/ListTasks";
 
-export default function Column() {
+export default function Column({ tasks }) {
+  console.log("column", tasks);
   return (
     <Box
       sx={{
-        minWidth: "300px",
-        maxWidth: "300px",
+        minWidth: "260px",
+        maxWidth: "260px",
         backgroundColor: "#fff011",
         ml: 2,
         borderRadius: "6px",
@@ -36,13 +37,14 @@ export default function Column() {
           variant="h6"
           sx={{ fontWeight: "bold", fontSize: "1rem", cursor: "pointer" }}
         >
-          Coloum title
+          {tasks?.statusName}
         </Typography>
         <Box></Box>
       </Box>
 
       {/* body  list card*/}
-      <ListTasks />
+
+      <ListTasks listTask={tasks?.lstTaskDeTail} />
       {/* footer  */}
       <Box
         sx={{
@@ -53,7 +55,7 @@ export default function Column() {
           justifyContent: "space-between",
         }}
       >
-        <Button startIcon={<AddCardIcon />}>Create issue</Button>
+        <Button startIcon={<AddCardIcon />}>Create Task</Button>
         <Tooltip title="Drag to move">
           <DragHandleIcon sx={{ cursor: "grab" }} />
         </Tooltip>
