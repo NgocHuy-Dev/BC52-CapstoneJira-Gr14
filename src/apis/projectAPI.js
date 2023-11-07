@@ -50,9 +50,11 @@ export async function createProject(payload) {
 // Create project
 
 // edit project
-export async function updateProject(payload) {
+export async function updateProject(payload, id) {
   try {
-    const response = await fetcher.put("/Project/updateProject", payload);
+    const response = await fetcher.put("/Project/updateProject", payload, {
+      params: { projectId: id },
+    });
     return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;
@@ -80,3 +82,17 @@ export const removeUserFromProject = async (userId) => {
     throw error.response.data;
   }
 };
+
+// thêm user vào project
+
+export async function assignUserProject(payload) {
+  try {
+    const response = await fetcher.post("/Project/assignUserProject", {
+      params: {
+        project: payload,
+      },
+    });
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}

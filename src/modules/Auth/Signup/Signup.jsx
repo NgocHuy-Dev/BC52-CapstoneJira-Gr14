@@ -48,15 +48,27 @@ const signupSchema = yup.object().shape({
 
 export default function Signup() {
   // useNavigate manage navigate button
-
   const navigate = useNavigate();
-
   // useState manage show password and show ConfirmPassword
-
   const [showPassword, setShowPassword] = useState(false);
 
-  // useMutation manage handle signup
+  //useForm manage form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      passWord: "",
+      name: "",
+      phoneNumber: "",
+    },
+    mode: "onTouched",
 
+    resolver: yupResolver(signupSchema),
+  });
+  // useMutation manage handle signup
   const {
     mutate: handelSignup,
     error,
@@ -69,17 +81,6 @@ export default function Signup() {
     onSuccess: () => {
       navigate("/signin");
     },
-  });
-
-  //useForm manage form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onTouched",
-
-    resolver: yupResolver(signupSchema),
   });
 
   const onSubmit = (values) => {

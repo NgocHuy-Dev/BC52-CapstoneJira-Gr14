@@ -15,10 +15,3 @@ export const Member = styled(Avatar)`
   color: gray;
   cursor: pointer;
 `;
-
-export const MemberAdd = styled(Avatar)`
-  color: gray;
-  background-color: white;
-  border: 1px solid rgb(11, 207, 11);
-  cursor: pointer;
-`;
