@@ -41,24 +41,31 @@ export default function EditProject() {
   });
   console.log("data edit", data);
   console.log("project Name:", data?.projectName);
-  console.log("data edit", data);
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      id: data?.id,
-      projectName: data?.projectName,
+      id: 0,
+      projectName: "",
       creator: 0,
-      description: data?.description,
-      categoryId: data?.projectCategory?.id,
+      description: "",
+      categoryId: 0,
     },
 
     resolver: yupResolver(editProjectSchema),
     mode: "onTouched",
   });
+
+  useEffect(() => {
+    setValue("id", data?.id);
+    setValue("projectName", data?.projectName);
+    setValue("description", data?.description);
+    setValue("categoryId", data.projectCategory?.id);
+  }, [setValue]);
 
   const { mutate: handleUpdate, error } = useMutation({
     mutationFn: (payload) => updateProject(payload),
@@ -79,7 +86,7 @@ export default function EditProject() {
     Swal.fire("Cập nhật thành công!", "", "success");
   };
 
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
@@ -104,6 +111,7 @@ export default function EditProject() {
               variant="outlined"
               margin="normal"
               fullWidth
+              defaultValue={data?.id}
               {...register("id")}
             />
           </Box>
