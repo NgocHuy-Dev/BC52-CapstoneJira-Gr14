@@ -6,6 +6,7 @@ export default function ProtectedRoute({ children }) {
   const { currentUser } = useUserContext();
 
   const location = useLocation();
+  console.log(location);
 
   if (!currentUser) {
     // chưa đăng nhập

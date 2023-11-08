@@ -33,7 +33,7 @@ export async function getProjectCategory() {
     throw error.response.data?.content;
   }
 }
-
+// Create project
 export async function createProject(payload) {
   try {
     const response = await fetcher.post(
@@ -47,18 +47,10 @@ export async function createProject(payload) {
   }
 }
 
-// Create project
-
 // edit project
-export async function updateProject(payload, id) {
+export async function updateProject(projectId) {
   try {
-    const response = await fetcher.put("/Project/updateProject", payload, {
-      params: { projectId: id },
-    });
-    return response.data?.content;
-  } catch (error) {
-    throw error.response.data?.content;
-  }
+  } catch (error) {}
 }
 
 // xóa project
@@ -82,16 +74,68 @@ export const removeUserFromProject = async (userId) => {
     throw error.response.data;
   }
 };
+// get status
 
-// thêm user vào project
-
-export async function assignUserProject(payload) {
+export async function getStatus() {
   try {
-    const response = await fetcher.post("/Project/assignUserProject", {
+    const response = await fetcher.get("/Status/getAll");
+
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// get priority
+
+export async function getPriority() {
+  try {
+    const response = await fetcher.get("/Priority/getAll");
+
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// get task Type
+
+export async function getTaskType() {
+  try {
+    const response = await fetcher.get("/TaskType/getAll");
+
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// Create tast
+export async function createTask(payload) {
+  try {
+    const response = await fetcher.post("/Project/createTask", payload);
+    // thêm ? optional chaining vào data để kiểm tra có dữ liệu thì trả chứ không báo lỗi
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// Edit task
+export async function editTask(payload) {
+  try {
+    const response = await fetcher.post("/Project/updateTask", payload);
+    // thêm ? optional chaining vào data để kiểm tra có dữ liệu thì trả chứ không báo lỗi
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// get Task Details
+export async function getTaskDetail(taskId) {
+  try {
+    const response = await fetcher.get("/Project/getTaskDetail", {
       params: {
-        project: payload,
+        id: taskId,
       },
     });
+    return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;
   }

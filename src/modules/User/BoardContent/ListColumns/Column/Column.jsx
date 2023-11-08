@@ -1,6 +1,6 @@
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
-import { useNavigate } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -9,8 +9,6 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListTasks from "./ListTasks/ListTasks";
 
 export default function Column({ tasks }) {
-  const navigate = useNavigate();
-
   console.log("column", tasks);
   return (
     <Box
@@ -57,12 +55,7 @@ export default function Column({ tasks }) {
           justifyContent: "space-between",
         }}
       >
-        <Button
-          startIcon={<AddCardIcon />}
-          onClick={() => navigate("/create/task")}
-        >
-          Create Task
-        </Button>
+        <Button startIcon={<AddCardIcon />}>Create Task</Button>
         <Tooltip title="Drag to move">
           <DragHandleIcon sx={{ cursor: "grab" }} />
         </Tooltip>

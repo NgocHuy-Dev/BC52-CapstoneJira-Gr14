@@ -31,3 +31,38 @@ export async function getUser(name) {
     throw error.response.data?.content;
   }
 }
+
+// getUsers
+export async function getUsers() {
+  try {
+    const response = await fetcher.get("/Users/getUser");
+
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+}
+// getUsers by projectID
+export const getUserByProjectId = async (projectId) => {
+  try {
+    const response = await fetcher.get("/Users/getUserByProjectId", {
+      params: {
+        projectId: projectId,
+      },
+    });
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+// xóa user
+export const deleteUser = async (userId) => {
+  try {
+    const response = await fetcher.delete("/Users/deleteUser", {
+      params: {
+        userId: userId,
+      },
+    });
+  } catch (error) {
+    throw error.response.data;
+  }
+};

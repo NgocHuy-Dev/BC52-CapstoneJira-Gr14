@@ -53,7 +53,6 @@ export default function Home() {
       ),
       cellClassName: "creator",
     },
-
     {
       field: "members",
       headerName: "Member",

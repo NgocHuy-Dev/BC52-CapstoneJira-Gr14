@@ -133,7 +133,9 @@ export default function CreateProject() {
     error,
   } = useMutation({
     mutationFn: (payload) => createProject(payload),
-
+    onSuccess: () => {
+      navigate("/createproject");
+    },
     onError: () => {
       Swal.fire("lỗi tè le hột me rồi");
     },
