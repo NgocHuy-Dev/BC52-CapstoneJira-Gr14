@@ -63,7 +63,7 @@ export default function Members({ members, projectId }) {
                     {member.name}
                   </TableCell>
                   <TableCell>
-                    <HighlightOffIcon sx={{ color: "red" }} />
+                    <HighlightOffIcon  sx={{ color: "red" }} />
                   </TableCell>
                 </TableRow>
               ))}
