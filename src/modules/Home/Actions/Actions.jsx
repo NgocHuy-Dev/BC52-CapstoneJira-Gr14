@@ -30,6 +30,8 @@ export default function Actions({ params }) {
       if (result.isConfirmed) {
         handleDeleteProject(id);
         Swal.fire("Đã xóa!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Lỗi!!", "");
       }
     });
   };

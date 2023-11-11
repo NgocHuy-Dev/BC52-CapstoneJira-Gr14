@@ -32,7 +32,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from 'yup';
+import * as yup from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { EditBox, CusLable, CusAlert } from "./CreateTask.styles";
@@ -53,12 +53,7 @@ const createTaskSchema = yup.object().shape({
 });
 
 export default function CreateTask() {
-
-
-
   const navigate = useNavigate();
-
-
 
   ///////////////////////////////Time tracking//////////////////////////////////////////////
 
@@ -115,22 +110,12 @@ export default function CreateTask() {
         if (typeof value === "string") {
           return [key, value.replace(/<p>/g, "").replace(/<\/p>/g, "")];
         }
-        if(typeof value === "array")
-        return [key, JSON.stringify(value)];
+        if (typeof value === "array") return [key, JSON.stringify(value)];
         return [key, value];
       })
     );
 
     // const listUserAsign = JSON.stringify(cleanedData.map((item)=>{return item.listUserAsignTypeArray}));
-
-
-
-
-
-
-
-
-   
 
     // Swal.fire("Đăng nhập thành công!", "", "success");
     toast.success("Create tast success!", {
@@ -209,7 +194,7 @@ export default function CreateTask() {
   const { data: userasigns = [], isLoading: loadingUserAsign } = useQuery({
     queryKey: ["userasigns"],
     queryFn: getUsers,
-   
+
     onSuccess: () => {
       setSelectedUserAsignOption(userasigns);
     },
@@ -256,7 +241,7 @@ export default function CreateTask() {
                   <Select {...register("projectName")} fullWidth>
                     {projects.map((option) => {
                       return (
-                        <MenuItem key={option.id} value={option.id}>
+                        <MenuItem key={option.id} value={option.projectName}>
                           {option.projectName}
                         </MenuItem>
                       );
@@ -297,7 +282,7 @@ export default function CreateTask() {
               <Box sx={{ minWidth: "80%" }}>
                 <CusLable id="taskName">Task Name</CusLable>
                 <TextField
-                disabled={false}
+                  disabled={false}
                   margin="normal"
                   required
                   name="taskName"
@@ -339,7 +324,7 @@ export default function CreateTask() {
               <Select {...register("statusId")}>
                 {status.map((option) => {
                   return (
-                    <MenuItem key={option.statusId} value={option.statusId}>
+                    <MenuItem key={option.statusId} value={option.statusName}>
                       {option.statusName}
                     </MenuItem>
                   );
@@ -535,10 +520,20 @@ export default function CreateTask() {
           {errors.description && <p>{errors.description.message}</p>}
         </EditBox>
 
-        <Button type="submit" variant="contained" color="primary" style={{ marginRight:'12px'}}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ marginRight: "12px" }}
+        >
           Create task
         </Button>
-        <Button type="button" variant="contained" color="primary" onClick={() => navigate("/projectdetail")}>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/projectdetail")}
+        >
           Cancel
         </Button>
       </form>

@@ -112,7 +112,7 @@ export async function createTask(payload) {
   try {
     const response = await fetcher.post("/Project/createTask", payload);
     // thêm ? optional chaining vào data để kiểm tra có dữ liệu thì trả chứ không báo lỗi
-    return response.data?.content;
+    // return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;
   }

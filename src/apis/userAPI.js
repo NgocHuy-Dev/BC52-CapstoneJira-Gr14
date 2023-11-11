@@ -66,3 +66,22 @@ export const deleteUser = async (userId) => {
     throw error.response.data;
   }
 };
+
+export const deleteUserFromProject = async (payload) => {
+  try {
+    const response = await fetcher.post(
+      "/Project/removeUserFromProject",
+      payload
+    );
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const assignUserProject = async (payload) => {
+  try {
+    const response = await fetcher.post("/Project/assignUserProject", payload);
+  } catch (error) {
+    throw error.response.data;
+  }
+};

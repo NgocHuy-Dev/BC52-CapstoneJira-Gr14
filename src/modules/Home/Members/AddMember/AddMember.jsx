@@ -9,10 +9,10 @@ import {
   TextField,
 } from "@mui/material";
 import { MemberAdd } from "./style";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUser } from "../../../../apis/userAPI";
 import { useState } from "react";
-import { assignUserProject } from "../../../../apis/projectAPI";
+import { assignUserProject } from "../../../../apis/userAPI";
 
 export default function AddMember({ projectId }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -36,15 +36,16 @@ export default function AddMember({ projectId }) {
     queryFn: () => getUser(userName),
   });
 
-  //   const [userId, setuserId] = useState("");
-  //   const newUser = { projectId: projectId, userId: userId };
+  const queryClient = useQueryClient();
 
-  //   const assignUser = useMutation((newUser) => assignUserProject(newUser));
-
-  //   const handleAssignUser = (id) => {
-  //     setuserId(id);
-  //     assignUser.mutate(newUser);
-  //   };
+  const mutation = useMutation({
+    mutationFn: (payload) => {
+      return assignUserProject(payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project"] });
+    },
+  });
 
   return (
     <Box>
@@ -61,22 +62,32 @@ export default function AddMember({ projectId }) {
           horizontal: "left",
         }}
       >
-        <Box sx={{ maxHeight: "200px", px: "10px" }}>
-          <TextField
-            sx={{ marginTop: "15px" }}
-            label="Enter user name"
-            size="small"
-            value={userName}
-            onInput={handleChange}
-          />
-          {allUser?.map((user) => (
-            <Typography
-              //   onClick={handleAssignUser(user.userId)}
-              key={user.userId}
-            >
-              {user.name}
-            </Typography>
-          ))}
+        <Box>
+          <Box>
+            <TextField
+              sx={{ marginTop: "15px" }}
+              label="Enter user name"
+              size="small"
+              value={userName}
+              onInput={handleChange}
+            />
+          </Box>
+          <Box sx={{ maxHeight: "200px", px: "10px" }}>
+            {allUser?.map((user) => (
+              <Typography
+                sx={{ cursor: "pointer", padding: "5px 0" }}
+                onClick={() => {
+                  mutation.mutate({
+                    projectId: projectId,
+                    userId: user.userId,
+                  });
+                }}
+                key={user.userId}
+              >
+                {user.name}
+              </Typography>
+            ))}
+          </Box>
         </Box>
       </Popover>
     </Box>

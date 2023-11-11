@@ -1,6 +1,6 @@
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -10,6 +10,8 @@ import ListTasks from "./ListTasks/ListTasks";
 
 export default function Column({ tasks }) {
   const navigate = useNavigate();
+  const projectId = useParams();
+  console.log("project id create task", projectId);
 
   console.log("column", tasks);
   return (

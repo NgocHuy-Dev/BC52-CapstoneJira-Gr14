@@ -17,9 +17,33 @@ import Popover from "@mui/material/Popover";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { LightTooltip, CusTableCell } from "./styles";
 import AddMember from "./AddMember";
+import { useMutation } from "@tanstack/react-query";
+import { deleteUserFromProject } from "../../../apis/userAPI";
+import Swal from "sweetalert2";
 
 export default function Members({ members, projectId }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const [userFromProject, setUserFromProject] = useState({
+    project: projectId,
+    userId: "",
+  });
+
+  // const { mutate: deleteUserProject, error } = useMutation({
+  //   mutationFn: (value) => {
+  //     return deleteUserFromProject(value);
+  //   },
+  //   onError: () => {
+  //     Swal.fire(error.message);
+  //   },
+  // });
+
+  const handleDeleteUser = (id) => {
+    setUserFromProject({ project: projectId, userId: id });
+    // deleteUserProject(userFromProject);
+  };
+
+  console.log("userFromProject", userFromProject);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -62,8 +86,12 @@ export default function Members({ members, projectId }) {
                   <TableCell size="small" sx={{ maxWidth: "100px" }}>
                     {member.name}
                   </TableCell>
-                  <TableCell>
-                    <HighlightOffIcon  sx={{ color: "red" }} />
+                  <TableCell
+                  //  onClick={() => handleDeleteUser(member.userId)}
+                  >
+                    <HighlightOffIcon
+                      sx={{ color: "red", cursor: "pointer" }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
