@@ -11,8 +11,7 @@ import {
   Box,
   Grid,
   Typography,
-  Paper
-
+  Paper,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -23,10 +22,15 @@ import LockIcon from "@mui/icons-material/Lock";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { useNavigate } from "react-router-dom";
-import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./Signup.styles";
+import {
+  CusAlert,
+  CusBackGr,
+  CusButton,
+  CusImage,
+  CusPaper,
+} from "./Signup.styles";
 import avt from "../../../../assets/img/logosign.png";
 import bg from "../../../../assets/img/bg1.png";
-
 
 const signupSchema = yup.object().shape({
   email: yup
@@ -50,19 +54,22 @@ export default function Signup() {
   // useState manage show password and show ConfirmPassword
 
   const [showPassword, setShowPassword] = useState(false);
- 
+
   // useMutation manage handle signup
 
-    const {mutate:handelSignup,error,isLoading}=useMutation(
-
-      {mutationFn:(payload)=>{signup(payload)},
-        // chuyển sang trang đăng nhập (/signin)
-       onSuccess:()=>{navigate('/signin')}
-
-      }
-      
-
-  )
+  const {
+    mutate: handelSignup,
+    error,
+    isLoading,
+  } = useMutation({
+    mutationFn: (payload) => {
+      signup(payload);
+    },
+    // chuyển sang trang đăng nhập (/signin)
+    onSuccess: () => {
+      navigate("/sign-in");
+    },
+  });
 
   //useForm manage form
   const {
@@ -71,7 +78,7 @@ export default function Signup() {
     formState: { errors },
   } = useForm({
     mode: "onTouched",
-    
+
     resolver: yupResolver(signupSchema),
   });
 
@@ -81,123 +88,123 @@ export default function Signup() {
     console.log(values);
   };
 
-
-
-
-
-
   return (
-    
     <Grid container component="main">
-    <Grid item xs={12} sm={4} md={7}>
-      <CusBackGr variant="square" src={bg} />
-    </Grid>
-    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-      <CusPaper>
-        <CusImage src={avt} />
-        <Typography component="h1" variant="h5">
-          Đăng Ký
-        </Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            placeholder="Email"
-            name="email"
-            autoFocus
-            {...register("email")}
-            InputProps={{
-              startAdornment: <EmailIcon />,
-            }}
-          />
-          {errors.email && (
-            <CusAlert variant="a">{errors.email.message}</CusAlert>
-          )}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="passWord"
-            placeholder="Password"
-            type={showPassword ? "text" : "passWord"}
-            id="passWord"
-            autoComplete="current-password"
-            {...register("passWord")}
-            InputProps={{
-              endAdornment: (
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              ),
-              startAdornment: <LockIcon />,
-            }}
-          />
-          {errors.passWord && (
-            <CusAlert variant="a">{errors.passWord.message}</CusAlert>
-          )}
-         
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="name"
-            placeholder="Name"
-            type="text"
-            id="name"
-            {...register("name")}
-            InputProps={{
-             
-              startAdornment: <AccountCircle />,
-            }}
-          />
-          {errors.name && (
-            <CusAlert variant="a">{errors.name.message}</CusAlert>
-          )}
-          
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="phoneNumber"
-            placeholder="Số diện thoại"
-            type="text"
-            id="phoneNumber"
-            {...register("phoneNumber")}
-            InputProps={{
-             
-              startAdornment: <LocalPhoneIcon />,
-            }}
-          />
-          {errors.phoneNumber && (
-            <CusAlert variant="a">{errors.phoneNumber.message}</CusAlert>
-          )}
-          <CusButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
-            Đăng ký
-          </CusButton>
-          {error && <CusAlert variant="a">{errors}</CusAlert>}
+      <Grid item xs={12} sm={4} md={7}>
+        <CusBackGr variant="square" src={bg} />
+      </Grid>
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <CusPaper>
+          <CusImage src={avt} />
+          <Typography component="h1" variant="h5">
+            Đăng Ký
+          </Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              placeholder="Email"
+              name="email"
+              autoFocus
+              {...register("email")}
+              InputProps={{
+                startAdornment: <EmailIcon />,
+              }}
+            />
+            {errors.email && (
+              <CusAlert variant="a">{errors.email.message}</CusAlert>
+            )}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="passWord"
+              placeholder="Password"
+              type={showPassword ? "text" : "passWord"}
+              id="passWord"
+              autoComplete="current-password"
+              {...register("passWord")}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                ),
+                startAdornment: <LockIcon />,
+              }}
+            />
+            {errors.passWord && (
+              <CusAlert variant="a">{errors.passWord.message}</CusAlert>
+            )}
 
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              placeholder="Name"
+              type="text"
+              id="name"
+              {...register("name")}
+              InputProps={{
+                startAdornment: <AccountCircle />,
+              }}
+            />
+            {errors.name && (
+              <CusAlert variant="a">{errors.name.message}</CusAlert>
+            )}
 
-          {/* Button Signgin */}
-          <Box display={"flex"} justifyContent={'center'} mt={2} xs={12} sm={12} md={6} lg={6} xl={6}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="phoneNumber"
+              placeholder="Số diện thoại"
+              type="text"
+              id="phoneNumber"
+              {...register("phoneNumber")}
+              InputProps={{
+                startAdornment: <LocalPhoneIcon />,
+              }}
+            />
+            {errors.phoneNumber && (
+              <CusAlert variant="a">{errors.phoneNumber.message}</CusAlert>
+            )}
+            <CusButton
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Đăng ký
+            </CusButton>
+            {error && <CusAlert variant="a">{errors}</CusAlert>}
+
+            {/* Button Signgin */}
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              mt={2}
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              xl={6}
+            >
               <Typography fontSize={13}>
                 Already have an account?
                 <Button
                   type="button"
                   onClick={() => {
-                    navigate("/signin");
+                    navigate("/sign-in");
                   }}
                 >
                   <Typography fontSize={13} textTransform={"none"}>
@@ -206,10 +213,10 @@ export default function Signup() {
                   </Typography>
                 </Button>
               </Typography>
-          </Box>
+            </Box>
             {/* Button Login with Social */}
 
-          <Box
+            <Box
               display={"flex"}
               justifyContent={"center"}
               mt={2}
@@ -236,13 +243,10 @@ export default function Signup() {
               >
                 <TwitterIcon />
               </Button>
-          </Box>
-         
-
-          
-        </form>
-      </CusPaper>
+            </Box>
+          </form>
+        </CusPaper>
+      </Grid>
     </Grid>
-  </Grid>
   );
 }

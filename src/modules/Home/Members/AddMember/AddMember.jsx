@@ -7,6 +7,7 @@ import {
   TableHead,
   TableCell,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { MemberAdd } from "./style";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -48,48 +49,50 @@ export default function AddMember({ projectId }) {
   });
 
   return (
-    <Box>
-      <MemberAdd aria-describedby={id} onClick={handleClick}>
-        +
-      </MemberAdd>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <Box>
-          <Box>
-            <TextField
-              sx={{ marginTop: "15px" }}
-              label="Enter user name"
-              size="small"
-              value={userName}
-              onInput={handleChange}
-            />
+    <Tooltip title="Add Member">
+      <Box>
+        <MemberAdd aria-describedby={id} onClick={handleClick}>
+          +
+        </MemberAdd>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+        >
+          <Box sx={{ maxHeight: "fit-content" }}>
+            <Box>
+              <TextField
+                sx={{ marginTop: "15px" }}
+                label="Enter user name"
+                size="small"
+                value={userName}
+                onInput={handleChange}
+              />
+            </Box>
+            <Box sx={{ maxHeight: "200px", px: "10px" }}>
+              {allUser?.map((user) => (
+                <Typography
+                  sx={{ cursor: "pointer", padding: "5px 0" }}
+                  onClick={() => {
+                    mutation.mutate({
+                      projectId: projectId,
+                      userId: user.userId,
+                    });
+                  }}
+                  key={user.userId}
+                >
+                  {user.name}
+                </Typography>
+              ))}
+            </Box>
           </Box>
-          <Box sx={{ maxHeight: "200px", px: "10px" }}>
-            {allUser?.map((user) => (
-              <Typography
-                sx={{ cursor: "pointer", padding: "5px 0" }}
-                onClick={() => {
-                  mutation.mutate({
-                    projectId: projectId,
-                    userId: user.userId,
-                  });
-                }}
-                key={user.userId}
-              >
-                {user.name}
-              </Typography>
-            ))}
-          </Box>
-        </Box>
-      </Popover>
-    </Box>
+        </Popover>
+      </Box>
+    </Tooltip>
   );
 }

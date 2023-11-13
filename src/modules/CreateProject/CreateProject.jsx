@@ -2,22 +2,15 @@ import { React, useState, useEffect } from "react";
 import {
   styles,
   stylesTitle,
-  CusImage,
-  CusBackGr,
-  CusPaper,
   CusButton,
   CusAlert,
   CusBox,
-  stylesForm,
-  CusReactQuill,
 } from "./CreateProject.styles";
 import {
   Typography,
   Box,
   TextField,
   InputLabel,
-  Grid,
-  Paper,
   Divider,
   Select,
   MenuItem,
@@ -25,7 +18,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getProjectCategory, createProject } from "./../../apis/projectAPI";
 import { object, string, number } from "yup";
 import Swal from "sweetalert2";
@@ -86,7 +79,7 @@ const QuillEditor = ({ name, control }) => {
           modules={modules}
           formats={formats}
           placeholder="Nhập văn bản của bạn"
-          style={{ height: "250px" }}
+          style={{ height: "200px" }}
         />
       )}
     />
@@ -134,7 +127,7 @@ export default function CreateProject() {
   } = useMutation({
     mutationFn: (payload) => createProject(payload),
     onSuccess: () => {
-      navigate("/createproject");
+      navigate("/");
     },
     onError: () => {
       Swal.fire("lỗi tè le hột me rồi");
@@ -170,7 +163,6 @@ export default function CreateProject() {
             margin="normal"
             required
             fullWidth
-            name="projectName"
             autoFocus
             {...register("projectName")}
           />
@@ -180,17 +172,15 @@ export default function CreateProject() {
 
           <InputLabel style={{ marginTop: "22px" }}>Description</InputLabel>
           <QuillEditor name="description" control={control} />
-          {errors.description && <p>{errors.description.message}</p>}
-          <InputLabel style={{ marginTop: "22px" }}>
-            Project Category
-          </InputLabel>
+          {errors.description && (
+            <CusAlert variant="a">{errors.description.message}</CusAlert>
+          )}
+          <InputLabel style={{ marginTop: "25px" }}>Alias</InputLabel>
 
           <TextField
             margin="normal"
             required
             fullWidth
-            label="Alias"
-            name="alias"
             autoFocus
             {...register("alias")}
           />

@@ -1,21 +1,35 @@
 import React from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import Tooltip from "@mui/material/Tooltip";
+import ListTasks from "./ListTasks/ListTasks";
 import { useNavigate, useParams } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import ListTasks from "./ListTasks/ListTasks";
 
 export default function Column({ tasks }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: tasks.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   const navigate = useNavigate();
   const projectId = useParams();
-  console.log("project id create task", projectId);
+  // console.log("project id create task", projectId);
 
-  console.log("column", tasks);
+  // console.log("column", tasks);
   return (
     <Box
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: "260px",
         maxWidth: "260px",

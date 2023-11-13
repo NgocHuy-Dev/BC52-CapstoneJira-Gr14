@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import React from "react";
-
-import { getProjectDetail } from "../../apis/projectAPI";
+import EditProject from "./EditProject";
+import { getProjectDetail, updateProject } from "../../apis/projectAPI";
 import EditDetail from "./EditDetail";
 
-export default function EditProject() {
+export default function Text() {
   const { projectId } = useParams();
-
+  console.log("ID", projectId);
   const { data = {}, isLoading } = useQuery({
     queryKey: ["projectId", projectId],
     queryFn: () => getProjectDetail(projectId),
@@ -15,11 +15,5 @@ export default function EditProject() {
   });
 
   console.log("ahahaha", data);
-  return (
-    <>
-      {Object.keys(data).length > 0 && (
-        <EditDetail projectId={projectId} data={data} />
-      )}
-    </>
-  );
+  return <>{Object.keys(data).length > 0 && <EditDetail data={data} />}</>;
 }

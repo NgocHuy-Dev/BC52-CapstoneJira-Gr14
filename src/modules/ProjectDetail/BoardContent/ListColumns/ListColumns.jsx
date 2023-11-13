@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/sortable";
 
 export default function ListColumns({ lstTask }) {
+  console.log("list Task in LIST COLUMN", lstTask);
   return (
     <Box
       sx={{
