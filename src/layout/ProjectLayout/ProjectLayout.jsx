@@ -3,6 +3,7 @@ import { Grid, Stack } from "@mui/material";
 import Navbar from "../../components/Navbar";
 import "./style.css";
 import { Outlet } from "react-router-dom";
+import Header from "../../components/Header/Header";
 
 export default function ProjectLayout() {
   return (

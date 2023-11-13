@@ -19,9 +19,11 @@ import { Text, NavListButton } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext/UserContext";
 import avt from "../../assets/img/meme-khoc_33.webp";
+import cyberlogo from "../../assets/img/cybersoft logo.jpeg";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import DrawIcon from "@mui/icons-material/Draw";
 
 const drawerWidth = 270;
 
@@ -40,7 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", marginTop: "30px" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -59,42 +61,51 @@ export default function Navbar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar>
-          {currentUser && (
-            <Box>
-              <Button>
-                <Avatar src={avt}>{currentUser.hoTen}</Avatar>
-              </Button>
-              <Button
-                sx={{ fontSize: "0.675rem" }}
-                variant="outlined"
-                onClick={handleSignout}
-              >
-                <LogoutIcon />
-                Đăng Xuất
-              </Button>
-            </Box>
-          )}{" "}
-          {!currentUser && (
-            <Box>
-              <Button
-                sx={{ margin: 1, fontSize: "0.8" }}
-                onClick={handleSignin}
-                variant="outlined"
-                startIcon={<LoginIcon />}
-              >
-                Đăng nhập
-              </Button>
-              <Button
-                sx={{ margin: 1, fontSize: "0.8" }}
-                onClick={handleSignup}
-                variant="outlined"
-                startIcon={<HowToRegIcon />}
-              >
-                Đăng Ký
-              </Button>
-            </Box>
-          )}
+        <Toolbar sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ height: "80px" }}>
+            <Avatar
+              src={cyberlogo}
+              variant="square"
+              sx={{ height: "100%", width: "100%" }}
+            />
+          </Box>
+          <Box>
+            {currentUser && (
+              <Box>
+                <Button>
+                  <Avatar src={avt}>{currentUser.hoTen}</Avatar>
+                </Button>
+                <Button
+                  sx={{ fontSize: "0.675rem" }}
+                  variant="outlined"
+                  onClick={handleSignout}
+                >
+                  <LogoutIcon />
+                  Đăng Xuất
+                </Button>
+              </Box>
+            )}
+            {!currentUser && (
+              <Box>
+                <Button
+                  sx={{ margin: 1, fontSize: "0.8" }}
+                  onClick={handleSignin}
+                  variant="outlined"
+                  startIcon={<LoginIcon />}
+                >
+                  Đăng nhập
+                </Button>
+                <Button
+                  sx={{ margin: 1, fontSize: "0.8" }}
+                  onClick={handleSignup}
+                  variant="outlined"
+                  startIcon={<HowToRegIcon />}
+                >
+                  Đăng Ký
+                </Button>
+              </Box>
+            )}
+          </Box>
         </Toolbar>
         <Divider />
         <List>
@@ -105,6 +116,7 @@ export default function Navbar() {
               </Text>
             </NavListButton>
           </ListItem>
+
           <ListItem disablePadding>
             <NavListButton onClick={handleGohome}>
               <Text>
@@ -112,10 +124,19 @@ export default function Navbar() {
               </Text>
             </NavListButton>
           </ListItem>
+
           <ListItem disablePadding>
             <NavListButton onClick={() => navigate("/createproject")}>
               <Text>
                 <CreateIcon sx={{ marginRight: 2 }} /> Create Project
+              </Text>
+            </NavListButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <NavListButton onClick={() => navigate("/createtask")}>
+              <Text>
+                <DrawIcon sx={{ marginRight: 2 }} /> Create Task
               </Text>
             </NavListButton>
           </ListItem>

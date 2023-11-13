@@ -48,9 +48,15 @@ export async function createProject(payload) {
 }
 
 // edit project
-export async function updateProject(projectId) {
+export async function updateProject(projectId, payload) {
   try {
-  } catch (error) {}
+    const response = await fetcher.put(
+      `Project/updateProject?projectId=${projectId}`,
+      payload
+    );
+  } catch (error) {
+    throw error.response.data?.content;
+  }
 }
 
 // xóa project

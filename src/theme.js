@@ -3,7 +3,7 @@ import { red } from "@mui/material/colors";
 
 const APP_BAR_HEIGHT = "58px";
 const BOARD_BAR_HEIGHT = "60px";
-const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`;
+const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT} )`;
 
 const COLUMN_HEADER_HEIGHT = "50px";
 const COLUMN_FOOTER_HEIGHT = "50px";
@@ -25,14 +25,14 @@ const theme = createTheme({
       secondary: "blue",
     },
     secondary: {
-      main: "##172B4D",
+      main: "#172B4D",
     },
 
     error: {
       main: red.A400,
     },
     text: {
-      secondary: red[500],
+      secondary: "#2684FF",
     },
   },
   components: {

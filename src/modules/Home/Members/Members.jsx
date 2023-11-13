@@ -17,33 +17,23 @@ import Popover from "@mui/material/Popover";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { LightTooltip, CusTableCell } from "./styles";
 import AddMember from "./AddMember";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteUserFromProject } from "../../../apis/userAPI";
 import Swal from "sweetalert2";
 
 export default function Members({ members, projectId }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const [userFromProject, setUserFromProject] = useState({
-    project: projectId,
-    userId: "",
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (payload) => {
+      return deleteUserFromProject(payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project"] });
+    },
   });
 
-  // const { mutate: deleteUserProject, error } = useMutation({
-  //   mutationFn: (value) => {
-  //     return deleteUserFromProject(value);
-  //   },
-  //   onError: () => {
-  //     Swal.fire(error.message);
-  //   },
-  // });
-
-  const handleDeleteUser = (id) => {
-    setUserFromProject({ project: projectId, userId: id });
-    // deleteUserProject(userFromProject);
-  };
-
-  console.log("userFromProject", userFromProject);
+  // console.log("userFromProject", userFromProject);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,7 +77,12 @@ export default function Members({ members, projectId }) {
                     {member.name}
                   </TableCell>
                   <TableCell
-                  //  onClick={() => handleDeleteUser(member.userId)}
+                    onClick={() => {
+                      mutation.mutate({
+                        projectId: projectId,
+                        userId: member.userId,
+                      });
+                    }}
                   >
                     <HighlightOffIcon
                       sx={{ color: "red", cursor: "pointer" }}
@@ -105,9 +100,7 @@ export default function Members({ members, projectId }) {
           ))}
         </AvatarGroup>
       </LightTooltip>
-      <Tooltip title="Add Member">
-        <AddMember projectId={projectId} />
-      </Tooltip>
+      <AddMember projectId={projectId} />
     </>
   );
 }
