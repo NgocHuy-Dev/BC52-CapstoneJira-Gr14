@@ -4,7 +4,7 @@ import ListColumns from "./ListColumns/ListColumns";
 import { DndContext } from "@dnd-kit/core";
 
 export default function BoardContent({ lstTask }) {
-  console.log("list Task", lstTask);
+  // console.log("list Task", lstTask);
   const handleDragEnd = (event) => {
     console.log("handleDragEnd", event);
   };

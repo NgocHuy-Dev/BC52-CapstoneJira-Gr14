@@ -12,48 +12,53 @@ import {
 export default function ListColumns({ lstTask }) {
   console.log("list Task in LIST COLUMN", lstTask);
   return (
-    <Box
-      sx={{
-        bgcolor: "inherit",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        overflowX: "auto",
-        overflowY: "hidden",
-        "&::-webkit-scrollbar-track": {
-          m: 2,
-        },
-      }}
+    <SortableContext
+      items={lstTask.map((id) => id.statusId)}
+      strategy={horizontalListSortingStrategy}
     >
-      {/* ADD THÊM COLUMN Ở ĐÂY  */}
-      {lstTask?.map((tasks) => (
-        <Column key={tasks.statusId} tasks={tasks} />
-      ))}
+      <Box
+        sx={{
+          bgcolor: "inherit",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          overflowX: "auto",
+          overflowY: "hidden",
+          "&::-webkit-scrollbar-track": {
+            m: 2,
+          },
+        }}
+      >
+        {/* ADD THÊM COLUMN Ở ĐÂY  */}
+        {lstTask?.map((tasks) => (
+          <Column key={tasks.statusId} tasks={tasks} />
+        ))}
 
-      <Tooltip title="Create column">
-        <Box
-          sx={{
-            minWidth: "50px",
-            maxWidth: "50px",
-            mx: 2,
-            borderRadius: "6px",
-            height: "fit-content",
-            bgcolor: "#ffffff3d",
-          }}
-        >
-          <Button
-            startIcon={<AddIcon />}
+        <Tooltip title="Create column">
+          <Box
             sx={{
-              color: "white",
-              width: "100%",
-              height: "100%",
-              justifyContent: "flex-start",
-              pl: 2.5,
-              py: 1.5,
+              minWidth: "50px",
+              maxWidth: "50px",
+              mx: 2,
+              borderRadius: "6px",
+              height: "fit-content",
+              bgcolor: "#ffffff3d",
             }}
-          ></Button>
-        </Box>
-      </Tooltip>
-    </Box>
+          >
+            <Button
+              startIcon={<AddIcon />}
+              sx={{
+                color: "white",
+                width: "100%",
+                height: "100%",
+                justifyContent: "flex-start",
+                pl: 2.5,
+                py: 1.5,
+              }}
+            ></Button>
+          </Box>
+        </Tooltip>
+      </Box>
+    </SortableContext>
   );
 }

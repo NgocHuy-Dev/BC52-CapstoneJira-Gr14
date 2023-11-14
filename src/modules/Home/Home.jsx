@@ -1,5 +1,4 @@
-import React, { useCallback } from "react";
-
+import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProject } from "../../apis/projectAPI";
@@ -79,6 +78,11 @@ export default function Home() {
     <div
       style={{ height: 580, width: "97%", marginLeft: "2%", marginRight: "1%" }}
     >
+      <Typography
+        sx={{ fontSize: "30px", padding: "10px", fontWeight: "bold" }}
+      >
+        Project Management
+      </Typography>
       <DataGrid
         rows={allProject}
         columns={columns}
