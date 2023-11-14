@@ -5,20 +5,33 @@ import EmailIcon from "@mui/icons-material/Email";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Navigate, useSearchParams,useNavigate } from "react-router-dom";
+import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
 import { signin } from "../../../../apis/userAPI";
 import { useUserContext } from "../../../../contexts/UserContext/UserContext";
 import avt from "../../../../assets/img/logosign.png";
 import bg from "../../../../assets/img/bg1.png";
-import Swal from "sweetalert2";
-import { Grid, Paper, Typography, TextField, Alert,IconButton,Box,Button, } from "@mui/material";
+import {
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+  Alert,
+  IconButton,
+  Box,
+  Button,
+} from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./Signin.styles";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import {
+  CusAlert,
+  CusBackGr,
+  CusButton,
+  CusImage,
+  CusPaper,
+} from "./Signin.styles";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const signinSchema = object({
   email: string().required("Email không được để trống"),
@@ -30,12 +43,10 @@ const signinSchema = object({
 });
 
 export default function Signin() {
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
   // useState manage show password and show ConfirmPassword
 
   const [showPassword, setShowPassword] = useState(false);
- 
 
   const { currentUser, handleSignin: onSigninSuccess } = useUserContext();
 
@@ -67,11 +78,11 @@ const navigate = useNavigate();
 
   const onSubmit = (values) => {
     // Swal.fire("Đăng nhập thành công!", "", "success");
-    toast.success('Đăng nhập thành công!', {
+    toast.success("Đăng nhập thành công!", {
       position: toast.POSITION.TOP_CENTER,
     });
     handleSignin(values);
-    console.log(values)
+    console.log(values);
   };
 
   // currentUser khác null => user đã đăng nhập => điều hướng về Home
@@ -144,8 +155,17 @@ const navigate = useNavigate();
             </CusButton>
             {error && <CusAlert variant="a">{errors}</CusAlert>}
 
-              {/* Button Signgup */}
-          <Box display={"flex"} justifyContent={'center'} mt={2} xs={12} sm={12} md={6} lg={6} xl={6}>
+            {/* Button Signgup */}
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              mt={2}
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              xl={6}
+            >
               <Typography fontSize={13}>
                 Do not have an account?
                 <Button
@@ -160,10 +180,10 @@ const navigate = useNavigate();
                   </Typography>
                 </Button>
               </Typography>
-          </Box>
+            </Box>
             {/* Button Login with Social */}
 
-          <Box
+            <Box
               display={"flex"}
               justifyContent={"center"}
               mt={2}
@@ -190,14 +210,11 @@ const navigate = useNavigate();
               >
                 <TwitterIcon />
               </Button>
-          </Box>
-
-
+            </Box>
           </form>
         </CusPaper>
       </Grid>
       <ToastContainer />
     </Grid>
   );
- 
 }

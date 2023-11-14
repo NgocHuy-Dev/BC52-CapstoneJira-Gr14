@@ -11,9 +11,8 @@ import {
 } from "../../apis/projectAPI";
 import { getUsers, getUserByProjectId } from "../../apis/userAPI";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -29,14 +28,13 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { EditBox, CusLable, CusAlert } from "./CreateTask.styles";
-import Swal from "sweetalert2";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 const createTaskSchema = yup.object().shape({
