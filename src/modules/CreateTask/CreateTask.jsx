@@ -490,7 +490,7 @@ export default function CreateTask() {
             render={({ field: { onChange } }) => (
               <Editor
                 value={htmlContent}
-                apiKey={process.env.REACT_APP_TINYMCE_KEY}
+                apiKey="rfmzf1ezo0i5w87f9fm8q1hk5rzfwi29ak9grgk8bnhden57"
                 onEditorChange={(content) => {
                   setHtmlContent(content);
                   onChange(content);

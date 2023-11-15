@@ -14,13 +14,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 export default function Column({ tasks }) {
   // console.log("TASK IN COLUMN", tasks);
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: tasks.statusId, data: { ...tasks } });
 
-  const dndStyle = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-  };
   const navigate = useNavigate();
   const projectId = useParams();
   // console.log("project id create task", projectId);
@@ -28,10 +22,6 @@ export default function Column({ tasks }) {
   // console.log("column", tasks);
   return (
     <Box
-      ref={setNodeRef}
-      style={dndStyle}
-      {...attributes}
-      {...listeners}
       sx={{
         minWidth: "260px",
         maxWidth: "260px",

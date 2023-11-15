@@ -150,6 +150,7 @@ export default function Signin() {
               fullWidth
               variant="contained"
               color="primary"
+              disabled={isLoading}
             >
               Đăng nhập
             </CusButton>

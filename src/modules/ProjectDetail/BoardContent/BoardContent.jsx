@@ -1,15 +1,11 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import ListColumns from "./ListColumns/ListColumns";
-import { DndContext } from "@dnd-kit/core";
+import { DragDropContext } from "react-beautiful-dnd";
 
 export default function BoardContent({ lstTask }) {
-  // console.log("list Task", lstTask);
-  const handleDragEnd = (event) => {
-    console.log("handleDragEnd", event);
-  };
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DragDropContext>
       <Box
         sx={{
           backgroundColor: "primary.main",
@@ -20,6 +16,6 @@ export default function BoardContent({ lstTask }) {
       >
         <ListColumns lstTask={lstTask} />
       </Box>
-    </DndContext>
+    </DragDropContext>
   );
 }

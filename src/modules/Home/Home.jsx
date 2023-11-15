@@ -88,7 +88,7 @@ export default function Home() {
         columns={columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
+            paginationModel: { page: 0, pageSize: 9 },
           },
         }}
         pageSizeOptions={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}

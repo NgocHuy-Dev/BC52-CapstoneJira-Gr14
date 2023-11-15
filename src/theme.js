@@ -73,6 +73,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          minHeight: "175px",
+        },
+      },
+    },
   },
 });
 

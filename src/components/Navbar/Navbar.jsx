@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Avatar, Button } from "@mui/material";
+import { Box, Avatar, Button, Typography, Tooltip } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -24,6 +24,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import DrawIcon from "@mui/icons-material/Draw";
+import { red } from "@mui/material/colors";
 
 const drawerWidth = 270;
 
@@ -72,17 +73,32 @@ export default function Navbar() {
           <Box>
             {currentUser && (
               <Box>
-                <Button>
-                  <Avatar src={avt}>{currentUser.hoTen}</Avatar>
-                </Button>
-                <Button
-                  sx={{ fontSize: "0.675rem" }}
-                  variant="outlined"
-                  onClick={handleSignout}
-                >
-                  <LogoutIcon />
-                  Đăng Xuất
-                </Button>
+                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                  <Button>
+                    <Avatar src={avt}>{currentUser.name}</Avatar>
+                  </Button>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                      color: "primary.main",
+                    }}
+                  >
+                    {currentUser.name}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ textAlign: "center" }}>
+                  <Button
+                    sx={{ fontSize: "0.675rem", marginBottom: "5px" }}
+                    variant="outlined"
+                    onClick={handleSignout}
+                  >
+                    <LogoutIcon />
+                    Đăng Xuất
+                  </Button>
+                </Box>
               </Box>
             )}
             {!currentUser && (

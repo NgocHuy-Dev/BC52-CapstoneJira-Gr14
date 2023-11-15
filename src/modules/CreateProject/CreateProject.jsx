@@ -25,6 +25,7 @@ import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
+import Loading from "../../components/Loading/Loading";
 
 const createProjectSchema = object({
   projectName: string().required("Tên dự án không được để trống"),
@@ -134,6 +135,8 @@ export default function CreateProject() {
     },
   });
 
+  if (isLoading) return <Loading />;
+
   const onSubmit = (dataSubmit) => {
     // clean special value
 
@@ -175,7 +178,7 @@ export default function CreateProject() {
           {errors.description && (
             <CusAlert variant="a">{errors.description.message}</CusAlert>
           )}
-          <InputLabel style={{ marginTop: "25px" }}>Alias</InputLabel>
+          <InputLabel style={{ marginTop: "50px" }}>Alias</InputLabel>
 
           <TextField
             margin="normal"
@@ -185,6 +188,7 @@ export default function CreateProject() {
             {...register("alias")}
           />
 
+          <InputLabel>Category</InputLabel>
           <Select {...register("categoryId")} fullWidth>
             {projectCategory.map((option) => {
               return (

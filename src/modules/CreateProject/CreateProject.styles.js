@@ -1,14 +1,6 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {
-  Avatar,
-  Button,
-  FormControl,
-  Paper,
-  Alert,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Avatar, Button, Paper, Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const stylesTitle = {
