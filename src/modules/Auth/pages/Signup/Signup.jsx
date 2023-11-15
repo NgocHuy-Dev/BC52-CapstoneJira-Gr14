@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {object, string} from 'yup'
 import {
   TextField,
   Button,
@@ -22,24 +23,18 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import LockIcon from "@mui/icons-material/Lock";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { useNavigate } from "react-router-dom";
-import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./Signup.styles";
-import avt from "../../../../assets/img/logosign.png";
-import bg from "../../../../assets/img/bg1.png";
 
+import { CusAlert, CusBackGr, CusButton, CusImage, CusPaper } from "./Signup.styles";
+import avt from "./../../../../components/assets/logo.jpg";
+import bg from "./../../../../components/assets/bg-signup.jpg";
+import { useNavigate } from 'react-router-dom';
 
 const signupSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Email không hợp lệ")
-    .required("Vui lòng nhập email của bạn"),
-
-  passWord: yup
-    .string()
-    .required("Vui lòng nhập mật khẩu của bạn")
-    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
-  name: yup.string().required("Vui lòng nhập tên của bạn"),
-  phoneNumber: yup.string().required("Vui lòng nhập số điện thoại của bạn"),
+  taiKhoan: string().required('Tài khoản không được để trống'),
+     matKhau: string().required('Mật khẩu không được để trống').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,"Mật khẩu ít nhất 8 kí tự, 1 kí tự hoa, 1 kí tự thường và 1 số"),
+     email: string().required('Email không được để trống').email("Email không đúng định dạng"),
+     hoTen:string().required('Họ Tên không được để trống').matches(/^[a-zA-Z]+$/ ,"Họ Tên chỉ dùng kí tự alphabe"),
+     soDt:string().required('Số điện thoại không được để trống').matches(/^(\+84|0)\d{9,10}$/,"Vui lòng nhập số điện thoại Việt Nam"),
 });
 
 export default function Signup() {
@@ -70,6 +65,7 @@ export default function Signup() {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    defaultValues:{taiKhoan:"",matKhau:"",email:"",hoTen:"",soDt:""},
     mode: "onTouched",
     
     resolver: yupResolver(signupSchema),
@@ -99,7 +95,54 @@ export default function Signup() {
           Đăng Ký
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
+          
+
+           <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="taiKhoan"
+            placeholder="Tài khoản"
+            type="text"
+            id="taiKhoan"
+            {...register("taiKhoan")}
+            InputProps={{
+             
+              startAdornment: <AccountCircle />,
+            }}
+          />
+          {errors.taiKhoan && (
+            <CusAlert variant="a">{errors.taiKhoan.message}</CusAlert>
+          )}
+          
           <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="matKhau"
+            placeholder="Mật khẩu"
+            type={showPassword ? "text" : "passWord"}
+            id="matKhau"
+            autoComplete="current-password"
+            {...register("matKhau")}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              ),
+              startAdornment: <LockIcon />,
+            }}
+          />
+          {errors.matKhau && (
+            <CusAlert variant="a">{errors.matKhau.message}</CusAlert>
+          )}
+         <TextField
             variant="outlined"
             margin="normal"
             required
@@ -115,70 +158,46 @@ export default function Signup() {
           {errors.email && (
             <CusAlert variant="a">{errors.email.message}</CusAlert>
           )}
-          <TextField
+      
+<TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="passWord"
-            placeholder="Password"
-            type={showPassword ? "text" : "passWord"}
-            id="passWord"
-            autoComplete="current-password"
-            {...register("passWord")}
-            InputProps={{
-              endAdornment: (
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              ),
-              startAdornment: <LockIcon />,
-            }}
-          />
-          {errors.passWord && (
-            <CusAlert variant="a">{errors.passWord.message}</CusAlert>
-          )}
-         
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="name"
+            name="hoTen"
             placeholder="Name"
             type="text"
-            id="name"
-            {...register("name")}
+            id="hoTen"
+            {...register("hoTen")}
             InputProps={{
              
               startAdornment: <AccountCircle />,
             }}
           />
-          {errors.name && (
-            <CusAlert variant="a">{errors.name.message}</CusAlert>
+          {errors.hoTen && (
+            <CusAlert variant="a">{errors.hoTen.message}</CusAlert>
           )}
-          
-          <TextField
+
+   
+<TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="phoneNumber"
+            name="soDt"
             placeholder="Số diện thoại"
             type="text"
-            id="phoneNumber"
-            {...register("phoneNumber")}
+            id="soDt"
+            {...register("soDt")}
             InputProps={{
              
               startAdornment: <LocalPhoneIcon />,
             }}
           />
-          {errors.phoneNumber && (
-            <CusAlert variant="a">{errors.phoneNumber.message}</CusAlert>
+          {errors.soDt && (
+            <CusAlert variant="a">{errors.soDt.message}</CusAlert>
           )}
+
           <CusButton
             type="submit"
             fullWidth

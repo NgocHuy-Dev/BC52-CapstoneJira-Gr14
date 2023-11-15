@@ -24,14 +24,14 @@ const loginFBSchema = yup.object().shape({
 
 
 //FB init
-window.fbAsyncInit = function() {
-  FB.init({
-    appId      : 'YOUR_APP_ID',
-    cookie     : true,
-    xfbml      : true,
-    version    : 'v11.0'
-  });
-};
+// window.fbAsyncInit = function() {
+//   FB.init({
+//     appId      : 'YOUR_APP_ID',
+//     cookie     : true,
+//     xfbml      : true,
+//     version    : 'v11.0'
+//   });
+// };
 
 
 

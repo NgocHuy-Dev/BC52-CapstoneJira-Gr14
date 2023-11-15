@@ -23,7 +23,7 @@ export const CusBackGr = styled(Avatar)`
   background-size: cover;
   background-position: center;
   width: 100%;
-  height: 80%;
+  height: 100%;
 `;
 
 export const CusPaper = styled(Paper)`
