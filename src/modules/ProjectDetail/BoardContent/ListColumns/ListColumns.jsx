@@ -4,10 +4,6 @@ import Box from "@mui/material/Box";
 import Column from "./Column";
 import { Button, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  SortableContext,
-  horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
 
 export default function ListColumns({ lstTask }) {
   console.log("list Task in LIST COLUMN", lstTask);

@@ -2,12 +2,16 @@ import React from "react";
 import Card from "@mui/material/Card";
 
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import AddCardIcon from "@mui/icons-material/AddCard";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
+import Box from "@mui/material/Box";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Avatar from "@mui/material/Avatar";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 export default function Task({ task }) {
+  console.log("TASK trong TASK", task);
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -17,9 +21,35 @@ export default function Task({ task }) {
       }}
     >
       <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0 5px",
+            marginBottom: "10px",
+          }}
+        >
+          <Typography gutterBottom variant="h5" component="div">
+            {task.taskName}
+          </Typography>
+          <EditIcon onClick={() => navigate(`/edittask/${task.taskId}`)} />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0 5px",
+          }}
+        >
+          <Typography sx={{ color: "#F44336" }}>
+            {task.priorityTask.priority}
+          </Typography>
+          <AvatarGroup max={3}>
+            {task.assigness?.map((user) => (
+              <Avatar key={user.id} alt={user.name} src={user.avatar} />
+            ))}
+          </AvatarGroup>
+        </Box>
       </CardContent>
     </Card>
   );

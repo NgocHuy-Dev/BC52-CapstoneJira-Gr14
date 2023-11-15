@@ -43,7 +43,7 @@ export default function ListTasks({ listTasks }) {
       >
         <CardContent sx={{ p: 1.5, "&last-child": { p: 1.5 } }}>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            List Task
           </Typography>
         </CardContent>
         <CardActions sx={{ p: "0 4px 8px 4px" }}>
@@ -62,7 +62,7 @@ export default function ListTasks({ listTasks }) {
       {listTasks?.map((task) => (
         <Task key={task.taskId} task={task} />
       ))}
-      <Task />
+      {/* <Task /> */}
 
       {/* LIST TASK  */}
     </Box>

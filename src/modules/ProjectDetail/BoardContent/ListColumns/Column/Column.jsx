@@ -1,6 +1,5 @@
 import React from "react";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+
 import Tooltip from "@mui/material/Tooltip";
 import ListTasks from "./ListTasks/ListTasks";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,15 +9,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function Column({ tasks }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: tasks.id });
+  // console.log("TASK IN COLUMN", tasks);
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
   const navigate = useNavigate();
   const projectId = useParams();
   // console.log("project id create task", projectId);
@@ -26,10 +22,6 @@ export default function Column({ tasks }) {
   // console.log("column", tasks);
   return (
     <Box
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
       sx={{
         minWidth: "260px",
         maxWidth: "260px",
@@ -55,14 +47,14 @@ export default function Column({ tasks }) {
           variant="h6"
           sx={{ fontWeight: "bold", fontSize: "1rem", cursor: "pointer" }}
         >
-          {tasks?.statusName}
+          {tasks.statusName}
         </Typography>
         <Box></Box>
       </Box>
 
       {/* body  list card*/}
 
-      <ListTasks listTask={tasks?.lstTaskDeTail} />
+      <ListTasks listTasks={tasks.lstTaskDeTail} />
       {/* footer  */}
       <Box
         sx={{
@@ -73,12 +65,7 @@ export default function Column({ tasks }) {
           justifyContent: "space-between",
         }}
       >
-        <Button
-          startIcon={<AddCardIcon />}
-          onClick={() => navigate("/create/task")}
-        >
-          Create Task
-        </Button>
+        <Button startIcon={<AddCardIcon />}>Create Task</Button>
         <Tooltip title="Drag to move">
           <DragHandleIcon sx={{ cursor: "grab" }} />
         </Tooltip>

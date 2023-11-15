@@ -6,14 +6,12 @@ import EditProject from "./modules/EditProject/EditProject";
 import ProtectedRoute from "./Routers/ProtectedRoute/ProtectedRoute";
 import ProjectDetail from "./modules/ProjectDetail/ProjectDetail";
 import CreateProject from "./modules/CreateProject";
-
 import NotFound from "./components/NotFound/NotFound";
 import Signin from "./modules/Auth/pages/Signin";
 import Signup from "./modules/Auth/pages/Signup";
 import CreateTask from "./modules/CreateTask/CreateTask";
-import EditTask from "./modules/Auth/components/EditTask/EditTask";
+import EditTask from "./modules/EditTask/EditTask";
 import UserManagement from "./modules/User/UserManagement/UserManagement";
-import Text from "./modules/EditProject/Text";
 
 function App() {
   <UserManagement />;
@@ -31,7 +29,7 @@ function App() {
               />
               <Route path="/createproject" element={<CreateProject />} />
               <Route path="/createtask" element={<CreateTask />} />
-              <Route path="/edit/task" element={<EditTask />} />
+              <Route path="/edittask/:taskId" element={<EditTask />} />
               <Route path="/user/management" element={<UserManagement />} />
               {/* <Route path="/user/edit/:userId" element={<EditUser />} /> */}
             </Route>
@@ -40,6 +38,7 @@ function App() {
 
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/sign-in" element={<Signin />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>
