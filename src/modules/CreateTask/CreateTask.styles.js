@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box,Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const EditBox = styled(Box)`
   display: flex;
@@ -8,7 +8,6 @@ export const EditBox = styled(Box)`
   flex-direction: column;
 `;
 export const CusLable = styled(Typography)`
-
   margin-bottom: 5px;
 `;
 export const CusAlert = styled.p`
