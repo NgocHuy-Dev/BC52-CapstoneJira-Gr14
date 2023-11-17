@@ -211,306 +211,307 @@ export default function EditTask() {
 
   //------------------------------------------------------------------
 
-  return "heheh";
-  // <Container maxWidth="md" sx={{ height: "100vh" }}>
-  //   <h3>Edit Task</h3>
-  //   <form onSubmit={handleSubmit(onSubmit)}>
-  //     <EditBox>
-  //       <Grid
-  //         container
-  //         spacing={2}
-  //         sx={{ flexDirection: { xs: "column", md: "row" } }}
-  //       >
-  //         <Grid item xs={6}>
-  //           {/* Project Name */}
-  //           <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-  //             <CusLable id="projectName">Project Name</CusLable>
+  return (
+    <Container maxWidth="md" sx={{ height: "100vh" }}>
+      <h3>Edit Task</h3>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <EditBox>
+          <Grid
+            container
+            spacing={2}
+            sx={{ flexDirection: { xs: "column", md: "row" } }}
+          >
+            <Grid item xs={6}>
+              {/* Project Name */}
+              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
+                <CusLable id="projectName">Project Name</CusLable>
 
-  //             <FormControl sx={{ minWidth: "55%" }}>
-  //               <Select {...register("projectName")} fullWidth>
-  //                 {projects.map((option) => {
-  //                   return (
-  //                     <MenuItem key={option.id} value={option.id}>
-  //                       {option.projectName}
-  //                     </MenuItem>
-  //                   );
-  //                 })}
-  //               </Select>
-  //             </FormControl>
-  //             {errors.projectName && (
-  //               <CusAlert variant="a">{errors.projectName.message}</CusAlert>
-  //             )}
-  //           </Box>
+                <FormControl sx={{ minWidth: "55%" }}>
+                  <Select {...register("projectName")} fullWidth>
+                    {projects.map((option) => {
+                      return (
+                        <MenuItem key={option.id} value={option.id}>
+                          {option.projectName}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                {errors.projectName && (
+                  <CusAlert variant="a">{errors.projectName.message}</CusAlert>
+                )}
+              </Box>
 
-  //           {/* Prioritys */}
-  //           <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-  //             <CusLable id="priorityId"> Priority </CusLable>
+              {/* Prioritys */}
+              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
+                <CusLable id="priorityId"> Priority </CusLable>
 
-  //             <FormControl sx={{ minWidth: "55%" }}>
-  //               <Select {...register("priorityId")} fullWidth>
-  //                 {prioritys.map((option) => {
-  //                   return (
-  //                     <MenuItem
-  //                       key={option.priorityId}
-  //                       value={option.priorityId}
-  //                     >
-  //                       {option.priority}
-  //                     </MenuItem>
-  //                   );
-  //                 })}
-  //               </Select>
-  //             </FormControl>
-  //             {errors.priorityId && (
-  //               <CusAlert variant="a">{errors.priorityId.message}</CusAlert>
-  //             )}
-  //           </Box>
-  //         </Grid>
-  //         <Grid item xs={6}>
-  //           {/* Task Name */}
+                <FormControl sx={{ minWidth: "55%" }}>
+                  <Select {...register("priorityId")} fullWidth>
+                    {prioritys.map((option) => {
+                      return (
+                        <MenuItem
+                          key={option.priorityId}
+                          value={option.priorityId}
+                        >
+                          {option.priority}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                {errors.priorityId && (
+                  <CusAlert variant="a">{errors.priorityId.message}</CusAlert>
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              {/* Task Name */}
 
-  //           <Box sx={{ minWidth: "80%" }}>
-  //             <CusLable id="taskName">Task Name</CusLable>
-  //             <TextField
-  //               margin="normal"
-  //               required
-  //               name="taskName"
-  //               autoFocus
-  //               {...register("taskName")}
-  //             />
-  //             {errors.taskName && (
-  //               <CusAlert variant="a">{errors.taskName.message}</CusAlert>
-  //             )}
-  //           </Box>
+              <Box sx={{ minWidth: "80%" }}>
+                <CusLable id="taskName">Task Name</CusLable>
+                <TextField
+                  margin="normal"
+                  required
+                  name="taskName"
+                  autoFocus
+                  {...register("taskName")}
+                />
+                {errors.taskName && (
+                  <CusAlert variant="a">{errors.taskName.message}</CusAlert>
+                )}
+              </Box>
 
-  //           {/* Task Type */}
-  //           <Box sx={{}}>
-  //             <CusLable id="typeId"> Task Type </CusLable>
+              {/* Task Type */}
+              <Box sx={{}}>
+                <CusLable id="typeId"> Task Type </CusLable>
 
-  //             <FormControl sx={{ minWidth: "55%" }}>
-  //               <Select {...register("typeId")} fullWidth>
-  //                 {tasktypes.map((option) => {
-  //                   return (
-  //                     <MenuItem key={option.id} value={option.id}>
-  //                       {option.taskType}
-  //                     </MenuItem>
-  //                   );
-  //                 })}
-  //               </Select>
-  //             </FormControl>
-  //             {errors.typeId && (
-  //               <CusAlert variant="a">{errors.typeId.message}</CusAlert>
-  //             )}
-  //           </Box>
-  //         </Grid>
-  //       </Grid>
+                <FormControl sx={{ minWidth: "55%" }}>
+                  <Select {...register("typeId")} fullWidth>
+                    {tasktypes.map((option) => {
+                      return (
+                        <MenuItem key={option.id} value={option.id}>
+                          {option.taskType}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                {errors.typeId && (
+                  <CusAlert variant="a">{errors.typeId.message}</CusAlert>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
 
-  //       {/* Status */}
-  //       <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-  //         <CusLable id="statusId">Status</CusLable>
+          {/* Status */}
+          <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
+            <CusLable id="statusId">Status</CusLable>
 
-  //         <FormControl sx={{ minWidth: "30%" }} fullWidth>
-  //           <Select {...register("statusId")}>
-  //             {status.map((option) => {
-  //               return (
-  //                 <MenuItem key={option.statusId} value={option.statusId}>
-  //                   {option.statusName}
-  //                 </MenuItem>
-  //               );
-  //             })}
-  //           </Select>
-  //         </FormControl>
-  //         {errors.statusId && (
-  //           <CusAlert variant="a">{errors.statusId.message}</CusAlert>
-  //         )}
-  //       </Box>
+            <FormControl sx={{ minWidth: "30%" }} fullWidth>
+              <Select {...register("statusId")}>
+                {status.map((option) => {
+                  return (
+                    <MenuItem key={option.statusId} value={option.statusId}>
+                      {option.statusName}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            {errors.statusId && (
+              <CusAlert variant="a">{errors.statusId.message}</CusAlert>
+            )}
+          </Box>
 
-  //       <Grid
-  //         container
-  //         spacing={3}
-  //         sx={{ flexDirection: { xs: "column", md: "row" } }}
-  //       >
-  //         <Grid item xs={6}>
-  //           {/* Asign */}
-  //           <Box sx={{ marginBottom: "8px", marginTop: "10px" }}>
-  //             <CusLable id="listUserAsign"> Asignees </CusLable>
+          <Grid
+            container
+            spacing={3}
+            sx={{ flexDirection: { xs: "column", md: "row" } }}
+          >
+            <Grid item xs={6}>
+              {/* Asign */}
+              <Box sx={{ marginBottom: "8px", marginTop: "10px" }}>
+                <CusLable id="listUserAsign"> Asignees </CusLable>
 
-  //             <FormControl sx={{ minWidth: "55%" }}>
-  //               <Select
-  //                 {...register("listUserAsign")}
-  //                 fullWidth
-  //                 multiple
-  //                 multiline
-  //                 value={choices}
-  //                 onChange={handleChangeChoice}
-  //                 renderValue={(selected) => (
-  //                   <div style={{ display: "flex", flexWrap: "wrap" }}>
-  //                     {selected.map((choice) => (
-  //                       <Chip
-  //                         key={choice}
-  //                         label={choice}
-  //                         onDelete={() => handleDelete(choice)}
-  //                         // onDelete={()=>handleDelete}
-  //                         deleteIcon={<CancelIcon />}
-  //                         style={{ margin: "2px" }}
-  //                       />
-  //                     ))}
-  //                   </div>
-  //                 )}
-  //               >
-  //                 {userasigns.map((option) => {
-  //                   return (
-  //                     <MenuItem key={option.userId} value={option.userId}>
-  //                       <img
-  //                         src={option.avatar}
-  //                         width={25}
-  //                         height={25}
-  //                         style={{ borderRadius: "50%", margin: "2px" }}
-  //                       />{" "}
-  //                       {"  "} {option.name}
-  //                     </MenuItem>
-  //                   );
-  //                 })}
-  //               </Select>
-  //             </FormControl>
+                <FormControl sx={{ minWidth: "55%" }}>
+                  <Select
+                    {...register("listUserAsign")}
+                    fullWidth
+                    multiple
+                    multiline
+                    value={choices}
+                    onChange={handleChangeChoice}
+                    renderValue={(selected) => (
+                      <div style={{ display: "flex", flexWrap: "wrap" }}>
+                        {selected.map((choice) => (
+                          <Chip
+                            key={choice}
+                            label={choice}
+                            onDelete={() => handleDelete(choice)}
+                            // onDelete={()=>handleDelete}
+                            deleteIcon={<CancelIcon />}
+                            style={{ margin: "2px" }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  >
+                    {userasigns.map((option) => {
+                      return (
+                        <MenuItem key={option.userId} value={option.userId}>
+                          <img
+                            src={option.avatar}
+                            width={25}
+                            height={25}
+                            style={{ borderRadius: "50%", margin: "2px" }}
+                          />{" "}
+                          {"  "} {option.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
 
-  //             {errors.listUserAsign && (
-  //               <CusAlert variant="a">
-  //                 {errors.listUserAsign.message}
-  //               </CusAlert>
-  //             )}
-  //           </Box>
+                {errors.listUserAsign && (
+                  <CusAlert variant="a">
+                    {errors.listUserAsign.message}
+                  </CusAlert>
+                )}
+              </Box>
 
-  //           {/*  original Estimate*/}
-  //           <Box sx={{ marginBottom: "5px" }}>
-  //             <CusLable id="typeId"> Original Estimate </CusLable>
-  //             <TextField
-  //               sx={{ minWidth: "55%" }}
-  //               variant="outlined"
-  //               margin="normal"
-  //               {...register("originalEstimate")}
-  //               // name="originalEstimate"
-  //               // label="originalEstimate"
-  //               // defaultValue={projectName}
-  //               error={!!errors.originalEstimate}
-  //               helperText={errors.originalEstimate?.message}
-  //               type="number"
-  //               inputProps={{ min: 0 }}
-  //             />
-  //             {errors.originalEstimate && (
-  //               <CusAlert variant="a">
-  //                 {errors.originalEstimate.message}
-  //               </CusAlert>
-  //             )}
-  //           </Box>
-  //         </Grid>
-  //         <Grid item xs={6}>
-  //           <Typography paddingLeft={"30%"}> Time Tracking</Typography>
+              {/*  original Estimate*/}
+              <Box sx={{ marginBottom: "5px" }}>
+                <CusLable id="typeId"> Original Estimate </CusLable>
+                <TextField
+                  sx={{ minWidth: "55%" }}
+                  variant="outlined"
+                  margin="normal"
+                  {...register("originalEstimate")}
+                  // name="originalEstimate"
+                  // label="originalEstimate"
+                  // defaultValue={projectName}
+                  error={!!errors.originalEstimate}
+                  helperText={errors.originalEstimate?.message}
+                  type="number"
+                  inputProps={{ min: 0 }}
+                />
+                {errors.originalEstimate && (
+                  <CusAlert variant="a">
+                    {errors.originalEstimate.message}
+                  </CusAlert>
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography paddingLeft={"30%"}> Time Tracking</Typography>
 
-  //           <Slider
-  //             value={typeof value === "number" ? value : 0}
-  //             onChange={handleChange}
-  //             aria-labelledby="input-slider"
-  //             min={0}
-  //             max={10}
-  //           />
+              <Slider
+                value={typeof value === "number" ? value : 0}
+                onChange={handleChange}
+                aria-labelledby="input-slider"
+                min={0}
+                max={10}
+              />
 
-  //           <Box display={"flex"}></Box>
+              <Box display={"flex"}></Box>
 
-  //           {/* /////////////////////////////////////////////////////////////////// */}
+              {/* /////////////////////////////////////////////////////////////////// */}
 
-  //           <Box display={"flex"}>
-  //             <span>Spent: </span>
+              <Box display={"flex"}>
+                <span>Spent: </span>
 
-  //             <TextField
-  //               {...register("timeTrackingSpent")}
-  //               sx={{ maxWidth: "65%" }}
-  //               variant="outlined"
-  //               value={10 - value}
-  //               onChange={handleInputChange}
-  //               onBlur={handleBlur}
-  //               type="number"
-  //               InputProps={{
-  //                 inputProps: {
-  //                   min: 0,
-  //                   max: 10,
-  //                 },
+                <TextField
+                  {...register("timeTrackingSpent")}
+                  sx={{ maxWidth: "65%" }}
+                  variant="outlined"
+                  value={10 - value}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      min: 0,
+                      max: 10,
+                    },
 
-  //                 endAdornment: <span>logged</span>,
-  //               }}
-  //             />
-  //             {errors.timeTrackingSpent && (
-  //               <CusAlert variant="a">
-  //                 {errors.timeTrackingSpent.message}
-  //               </CusAlert>
-  //             )}
-  //             <span style={{ paddingLeft: "23px" }}>Remaining: </span>
-  //             <TextField
-  //               {...register("timeTrackingRemaining")}
-  //               sx={{ maxWidth: "65%" }}
-  //               variant="outlined"
-  //               value={value}
-  //               onChange={handleInputChange}
-  //               onBlur={handleBlur}
-  //               type="number"
-  //               InputProps={{
-  //                 inputProps: {
-  //                   min: 0,
-  //                   max: 10,
-  //                 },
+                    endAdornment: <span>logged</span>,
+                  }}
+                />
+                {errors.timeTrackingSpent && (
+                  <CusAlert variant="a">
+                    {errors.timeTrackingSpent.message}
+                  </CusAlert>
+                )}
+                <span style={{ paddingLeft: "23px" }}>Remaining: </span>
+                <TextField
+                  {...register("timeTrackingRemaining")}
+                  sx={{ maxWidth: "65%" }}
+                  variant="outlined"
+                  value={value}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      min: 0,
+                      max: 10,
+                    },
 
-  //                 endAdornment: <span>estimate </span>,
-  //               }}
-  //             />
-  //             {errors.timeTrackingRemaining && (
-  //               <CusAlert variant="a">
-  //                 {errors.timeTrackingRemaining.message}
-  //               </CusAlert>
-  //             )}
-  //           </Box>
+                    endAdornment: <span>estimate </span>,
+                  }}
+                />
+                {errors.timeTrackingRemaining && (
+                  <CusAlert variant="a">
+                    {errors.timeTrackingRemaining.message}
+                  </CusAlert>
+                )}
+              </Box>
 
-  //           {/* ///////////////////////////////////////////////////////////// */}
-  //         </Grid>
-  //       </Grid>
+              {/* ///////////////////////////////////////////////////////////// */}
+            </Grid>
+          </Grid>
 
-  //       {/* Description*/}
-  //       <Controller
-  //         name="description"
-  //         control={control}
-  //         rules={{ required: "Vui lòng nhập nội dung" }}
-  //         render={({ field: { onChange } }) => (
-  //           <Editor
-  //             value={htmlContent}
-  //             apiKey={process.env.REACT_APP_TINYMCE_KEY}
-  //             onEditorChange={(content) => {
-  //               setHtmlContent(content);
-  //               onChange(content);
-  //             }}
-  //             init={{
-  //               height: 200,
-  //               menubar: false,
-  //               plugins: [
-  //                 "advlist autolink lists link image charmap print preview anchor",
-  //                 "searchreplace visualblocks code fullscreen",
-  //                 "insertdatetime media table paste code help wordcount",
-  //               ],
-  //               toolbar:
-  //                 "undo redo | formatselect | " +
-  //                 "bold italic backcolor | alignleft aligncenter " +
-  //                 "alignright alignjustify | bullist numlist outdent indent | " +
-  //                 "removeformat | help",
-  //               content_style:
-  //                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, }",
-  //             }}
-  //           />
-  //         )}
-  //       />
+          {/* Description*/}
+          <Controller
+            name="description"
+            control={control}
+            rules={{ required: "Vui lòng nhập nội dung" }}
+            render={({ field: { onChange } }) => (
+              <Editor
+                value={htmlContent}
+                apiKey={process.env.REACT_APP_TINYMCE_KEY}
+                onEditorChange={(content) => {
+                  setHtmlContent(content);
+                  onChange(content);
+                }}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | " +
+                    "bold italic backcolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px, }",
+                }}
+              />
+            )}
+          />
 
-  //       {errors.description && <p>{errors.description.message}</p>}
-  //     </EditBox>
+          {errors.description && <p>{errors.description.message}</p>}
+        </EditBox>
 
-  //     <Button type="submit" variant="contained" color="primary">
-  //       Create task
-  //     </Button>
-  //   </form>
-  // </Container>
+        <Button type="submit" variant="contained" color="primary">
+          Create task
+        </Button>
+      </form>
+    </Container>
+  );
 }

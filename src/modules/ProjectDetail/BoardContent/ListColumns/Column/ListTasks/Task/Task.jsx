@@ -10,7 +10,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 
 export default function Task({ task }) {
-  console.log("TASK trong TASK", task);
   const navigate = useNavigate();
   return (
     <Card

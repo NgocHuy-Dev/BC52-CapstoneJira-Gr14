@@ -4,9 +4,10 @@ import Box from "@mui/material/Box";
 import Column from "./Column";
 import { Button, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function ListColumns({ lstTask }) {
-  console.log("list Task in LIST COLUMN", lstTask);
+  // console.log("list Task in LIST COLUMN", lstTask);
   return (
     <Box
       sx={{
@@ -22,9 +23,22 @@ export default function ListColumns({ lstTask }) {
       }}
     >
       {/* ADD THÊM COLUMN Ở ĐÂY  */}
-      {lstTask?.map((tasks) => (
-        <Column key={tasks.statusId} tasks={tasks} />
-      ))}
+      {lstTask?.map((tasks, index) => {
+        return (
+          <Droppable key={tasks.statusId} droppableId={tasks.statusId}>
+            {(provided) => {
+              return (
+                <Box ref={provided.innerRef}>
+                  <Box>
+                    <Column key={tasks.statusId} tasks={tasks} />
+                    {provided.placeholder}
+                  </Box>
+                </Box>
+              );
+            }}
+          </Droppable>
+        );
+      })}
 
       <Tooltip title="Create column">
         <Box
