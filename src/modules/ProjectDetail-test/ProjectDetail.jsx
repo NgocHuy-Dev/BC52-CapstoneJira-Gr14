@@ -30,15 +30,15 @@ export default function ProjectDetail() {
       queryClient.invalidateQueries("projectId");
     },
   });
-  useEffect(() => {
-    if (projectDetail && projectDetail.lstTask) {
-      const initialItems = {};
-      projectDetail.lstTask.forEach((status) => {
-        initialItems[status.statusId] = status.lstTaskDeTail || [];
-      });
-      setItems(initialItems);
-    }
-  }, [projectDetail]);
+  // useEffect(() => {
+  //   if (projectDetail && projectDetail.lstTask) {
+  //     const initialItems = {};
+  //     projectDetail.lstTask.forEach((status) => {
+  //       initialItems[status.statusId] = status.lstTaskDeTail || [];
+  //     });
+  //     setItems(initialItems);
+  //   }
+  // }, [projectDetail]);
 
   return (
     <>
@@ -50,9 +50,7 @@ export default function ProjectDetail() {
             member={projectDetail.member}
           />
           <BoardContent
-            data={projectDetail}
-            items={items}
-            setItems={setItems}
+            data={projectDetail.lstTask}
             handleUpdateStatus={handleUpdateStatus}
           />
         </Container>
