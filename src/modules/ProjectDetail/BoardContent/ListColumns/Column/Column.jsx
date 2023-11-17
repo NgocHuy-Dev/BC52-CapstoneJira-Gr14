@@ -9,8 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function Column({ tasks }) {
   // console.log("TASK IN COLUMN", tasks);
@@ -19,7 +18,7 @@ export default function Column({ tasks }) {
   const projectId = useParams();
   // console.log("project id create task", projectId);
 
-  // console.log("column", tasks);
+  // console.log("STATUS ID", parseInt(tasks.statusId));
   return (
     <Box
       sx={{
@@ -49,7 +48,6 @@ export default function Column({ tasks }) {
         >
           {tasks.statusName}
         </Typography>
-        <Box></Box>
       </Box>
 
       {/* body  list card*/}

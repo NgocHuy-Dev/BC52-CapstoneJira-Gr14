@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectDetail } from "../../apis/projectAPI";
@@ -10,11 +10,22 @@ import BoardContent from "./BoardContent";
 
 export default function ProjectDetail() {
   const { projectId } = useParams();
+  const [items, setItems] = useState({});
 
   const { data: projectDetail = [] } = useQuery({
     queryKey: ["id", projectId],
     queryFn: () => getProjectDetail(projectId),
   });
+
+  useEffect(() => {
+    if (projectDetail && projectDetail.lstTask) {
+      const initialItems = {};
+      projectDetail.lstTask.forEach((status) => {
+        initialItems[status.statusId] = status.lstTaskDeTail || [];
+      });
+      setItems(initialItems);
+    }
+  }, [projectDetail]);
 
   return (
     <>
@@ -25,7 +36,7 @@ export default function ProjectDetail() {
             creator={projectDetail.creator}
             member={projectDetail.member}
           />
-          <BoardContent lstTask={projectDetail.lstTask} />
+          <BoardContent data={projectDetail} items={items} />
         </Container>
       )}
     </>

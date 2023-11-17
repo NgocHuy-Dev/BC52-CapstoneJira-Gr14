@@ -146,3 +146,14 @@ export async function getTaskDetail(taskId) {
     throw error.response.data?.content;
   }
 }
+
+// update Project
+
+export const updateStatus = async (payload) => {
+  try {
+    const response = await fetcher.put("/Project/updateStatus", payload);
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+};
