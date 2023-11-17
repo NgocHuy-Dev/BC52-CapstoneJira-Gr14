@@ -5,103 +5,72 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateStatus } from "../../../apis/projectAPI";
 
-export default function BoardContent({ data, items }) {
-  console.log("🚀 ~ file: BoardContent.jsx:9 ~ BoardContent ~ items:", items);
-  console.log("🚀 ~ file: BoardContent.jsx:10 ~ BoardContent ~ data:", data);
-
-  // useEffect(() => {
-  //   if (projectDetail && projectDetail.lstTask) {
-  //     const initialItems = {};
-  //     projectDetail.lstTask.forEach((status) => {
-  //       initialItems[status.statusId] = status.lstTaskDeTail || [];
-  //     });
-  //     setItems(initialItems);
-  //   }
-  // }, [projectDetail]);
-
-  const [taskId, setTaskId] = useState("");
-  const queryClient = useQueryClient();
-
-  const { mutate: handleUpdateStatus, error } = useMutation({
-    mutationFn: (payload) =>
-      updateStatus({
-        taskId: payload[0],
-        statusId: payload[1],
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries("getProjectDetail");
-    },
-    onError: () => {
-      alert(error);
-    },
-  });
+export default function BoardContent({
+  data,
+  items,
+  setItems,
+  handleUpdateStatus,
+}) {
+  console.log("DATA", data);
 
   const handleDragAndDrop = (result) => {
-    const { source, destination, draggableId, taskId } = result;
-    console.log(
-      "🚀 ~ file: BoardContent.jsx:40 ~ handleDragAndDrop ~ source:",
-      source
-    );
+    const { source, destination, draggableId, type, taskId } = result;
+    console.log("DESTINATION", destination);
 
-    console.log(
-      "🚀 ~ file: BoardContent.jsx:40 ~ handleDragAndDrop ~ draggableId:",
-      draggableId
-    );
-    console.log(
-      "🚀 ~ file: BoardContent.jsx:40 ~ handleDragAndDrop ~ destination:",
-      destination
-    );
-    console.log(
-      "🚀 ~ file: BoardContent.jsx:40 ~ handleDragAndDrop ~ source:",
-      source
-    );
-
-    // ngăn chặn lỗi
+    // ngăn chặn lỗi ko có điểm đến --> ko làm gì cả
     if (!destination) {
       return;
     }
+    // kéo về bị trí ban đầu ---> ko làm gì cả
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    )
+      return;
 
     // tìm trạng thái mới và cũ
     const sourceStatus = source.droppableId;
 
     const destinationStatus = destination.droppableId;
-
     // lấy tên từ draggableId (tên task bị kéo)
     const taskName = draggableId;
 
-    console.log("Item", items);
     // Tìm item có taskName tương ứng trong danh sách items
-    const draggedItem = Object.keys(items).find((status) =>
-      status.find((item) => item.taskName === taskName)
+    const draggedItem = Object.values(items).find((status) => {
+      return Object.values(status).find((item) => item.taskName === taskName);
+    });
+
+    const findTaskId = draggedItem.find(
+      (item) => item.taskName === draggableId
     );
 
-    // const findTaskId = draggedItem.find(
-    //   (item) => item.taskName === draggableId
-    // );
+    if (sourceStatus !== destinationStatus) {
+      console.log("khác nhau");
+      // Nếu công việc đã bị kéo vào một cột khác, gọi API để cập nhật trạng thái
+      handleUpdateStatus([findTaskId.taskId, destinationStatus]);
+    }
 
-    // if (sourceStatus !== destinationStatus) {
-    //   console.log("taskId: ", taskId);
-    //   console.log("destinationStatus: ", destinationStatus);
-    //   // Nếu công việc đã bị kéo vào một nhóm khác, gọi API để cập nhật trạng thái
-    //   // handleUpdateStatus([findTaskId.taskId, destinationStatus]);
-    // }
+    if (source.droppableId === destination.droppableId) {
+      console.log("GIỐNG NHAU RỒI ĐÓ");
+      // Kéo mục trong cùng một nhóm
 
-    // if (source.droppableId === destination.droppableId) {
-    //   // Kéo mục trong cùng một nhóm
-    //   const updatedItems = { ...items };
-    //   const updatedGroup = [...updatedItems[source.droppableId]];
+      const updatedItems = { ...items };
 
-    //   updatedGroup.splice(source.index, 1);
-    //   updatedGroup.splice(
-    //     destination.index,
-    //     0,
-    //     items[source.droppableId][source.index]
-    //   );
+      const updatedGroup = [...updatedItems[source.droppableId]];
 
-    //   updatedItems[source.droppableId] = updatedGroup;
-    //   setItems(updatedItems);
-    // } else {
+      updatedGroup.splice(source.index, 1);
+      updatedGroup.splice(
+        destination.index,
+        0,
+        items[source.droppableId][source.index]
+      );
+
+      updatedItems[source.droppableId] = updatedGroup;
+      setItems(updatedItems);
+    }
+    // else {
     //   // Kéo mục qua các nhóm khác nhau
+    //   console.log("LẠI KHÁC NỮA RỒI ĐÓ");
     //   const sourceGroup = [...items[source.droppableId]];
     //   const destGroup = [...items[destination.droppableId]];
     //   const [draggedItem] = sourceGroup.splice(source.index, 1);

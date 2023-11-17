@@ -11,8 +11,9 @@ import {
 } from "../../apis/projectAPI";
 import { getUsers, getUserByProjectId } from "../../apis/userAPI";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useParams } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -28,20 +29,21 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { EditBox, CusLable, CusAlert } from "./CreateTask.styles";
+import Swal from "sweetalert2";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 const createTaskSchema = yup.object().shape({
   listUserAsign: yup.array(),
   taskName: yup.string().required("Tên nhiệm vụ là bắt buộc"),
   description: yup.string().required("Mô tả là bắt buộc"),
-  statusId: yup.string().required("Status là bắt buộc"),
+  statusId: yup.number().required("Status là bắt buộc"),
   originalEstimate: yup.number(),
   timeTrackingSpent: yup.number(),
   timeTrackingRemaining: yup.number(),
@@ -81,17 +83,71 @@ export default function CreateTask() {
     control,
     formState: { errors },
   } = useForm({
-    // defaultValues: {
-    //   id: data.id,
-    //   projectName: data.projectName,
-    //   creator: data.creator,
-    //   description: data.description,
-    //   categoryId: data.categoryId,
-    // },
+    defaultValues: {
+      taskName: "",
+      projectId: "",
+      statusId: "",
+      priorityId: "",
+      typeId: "",
+      listUserAsign: [],
+      originalEstimate: 0,
+      timeTrackingSpent: 0,
+      timeTrackingRemaining: 0,
+      description: "",
+    },
     resolver: yupResolver(createTaskSchema),
     mode: "onTouched",
   });
 
+  // gọi api
+  // project name
+
+  const [selectedprojectOption, setSelectedprojectOption] = useState("");
+
+  const { data: projects = [], isLoading: loading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: getAllProject,
+    onSuccess: () => {
+      setSelectedprojectOption(projects);
+    },
+  });
+
+  // Status
+
+  const [selectedStatusOption, setSelectedStatusOption] = useState("");
+
+  const { data: status = [] } = useQuery({
+    queryKey: ["status"],
+    queryFn: getStatus,
+    onSuccess: () => {
+      setSelectedStatusOption(status);
+    },
+  });
+
+  // Priority
+
+  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
+
+  const { data: prioritys = [] } = useQuery({
+    queryKey: ["prioritys"],
+    queryFn: getPriority,
+    onSuccess: () => {
+      setSelectedPriorityOption(prioritys);
+    },
+  });
+  // Task Type
+
+  const [selectedTaskTypeOption, setSelectedTaskTypeOption] = useState("");
+
+  const { data: tasktypes = [] } = useQuery({
+    queryKey: ["tasktypes"],
+    queryFn: getTaskType,
+    onSuccess: () => {
+      setSelectedTaskTypeOption(tasktypes);
+    },
+  });
+
+  // xử lý submit
   const {
     mutate: handleCreateTask,
     isLoading,
@@ -137,53 +193,6 @@ export default function CreateTask() {
     }
   };
   //=======================
-
-  // project name
-
-  const [selectedprojectOption, setSelectedprojectOption] = useState("");
-
-  const { data: projects = [], isLoading: loading } = useQuery({
-    queryKey: ["projects"],
-    queryFn: getAllProject,
-    onSuccess: () => {
-      setSelectedprojectOption(projects);
-    },
-  });
-
-  // Status
-
-  const [selectedStatusOption, setSelectedStatusOption] = useState("");
-
-  const { data: status = [], isLoading: loadingStatus } = useQuery({
-    queryKey: ["status"],
-    queryFn: getStatus,
-    onSuccess: () => {
-      setSelectedStatusOption(status);
-    },
-  });
-
-  // Priority
-
-  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-
-  const { data: prioritys = [], isLoading: loadingPriority } = useQuery({
-    queryKey: ["prioritys"],
-    queryFn: getPriority,
-    onSuccess: () => {
-      setSelectedPriorityOption(prioritys);
-    },
-  });
-  // Task Type
-
-  const [selectedTaskTypeOption, setSelectedTaskTypeOption] = useState("");
-
-  const { data: tasktypes = [], isLoading: loadingTaskType } = useQuery({
-    queryKey: ["tasktypes"],
-    queryFn: getTaskType,
-    onSuccess: () => {
-      setSelectedTaskTypeOption(tasktypes);
-    },
-  });
 
   // User Asign
 
@@ -239,7 +248,7 @@ export default function CreateTask() {
                   <Select {...register("projectName")} fullWidth>
                     {projects.map((option) => {
                       return (
-                        <MenuItem key={option.id} value={option.projectName}>
+                        <MenuItem key={option.id} value={option.id}>
                           {option.projectName}
                         </MenuItem>
                       );
@@ -322,7 +331,7 @@ export default function CreateTask() {
               <Select {...register("statusId")}>
                 {status.map((option) => {
                   return (
-                    <MenuItem key={option.statusId} value={option.statusName}>
+                    <MenuItem key={option.statusId} value={option.statusId}>
                       {option.statusName}
                     </MenuItem>
                   );
@@ -490,7 +499,7 @@ export default function CreateTask() {
             render={({ field: { onChange } }) => (
               <Editor
                 value={htmlContent}
-                apiKey="rfmzf1ezo0i5w87f9fm8q1hk5rzfwi29ak9grgk8bnhden57"
+                apiKey={process.env.REACT_APP_TINYMCE_KEY}
                 onEditorChange={(content) => {
                   setHtmlContent(content);
                   onChange(content);
