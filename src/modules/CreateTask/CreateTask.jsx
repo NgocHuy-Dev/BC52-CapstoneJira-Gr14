@@ -51,6 +51,14 @@ const createTaskSchema = yup.object().shape({
   priorityId: yup.number(),
 });
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 300,
+    },
+  },
+};
+
 export default function CreateTask() {
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -216,9 +224,14 @@ export default function CreateTask() {
 
   //------------------------------------------------------------------
   const [projectName, setProjectName] = useState();
-
   const handleChange = (event) => {
-    setProjectName(event.target.value);
+    const {
+      target: { value },
+    } = event;
+    setProjectName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
 
   return (
@@ -237,15 +250,19 @@ export default function CreateTask() {
                 <label htmlFor="projectId">
                   <Typography variant="p">Project Name</Typography>
                 </label>
-                <FormControl sx={{ width: "100%" }}>
-                  <Select {...register("projectName")} fullWidth>
-                    {allProject.map((option) => {
-                      return (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.projectName}
-                        </MenuItem>
-                      );
-                    })}
+                <FormControl size="small" fullWidth>
+                  <Select
+                    labelId="project-name-label"
+                    id="demo-multiple-name"
+                    value={projectName}
+                    onChange={handleChange}
+                    MenuProps={MenuProps}
+                  >
+                    {allProject.map((project) => (
+                      <MenuItem key={project.id} value={project.id}>
+                        {project.projectName}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Box>
@@ -366,10 +383,10 @@ export default function CreateTask() {
                       },
                     }}
                   >
-                    {taskType.map((status) => {
+                    {status.map((status) => {
                       return (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.taskType}
+                        <MenuItem key={status.statusId} value={status.statusId}>
+                          {status.statusName}
                         </MenuItem>
                       );
                     })}
