@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { signup } from "./../../../../apis/userAPI";
+import { signup } from "../../../apis/userAPI";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,8 +29,8 @@ import {
   CusImage,
   CusPaper,
 } from "./Signup.styles";
-import avt from "../../../../assets/img/logosign.png";
-import bg from "../../../../assets/img/bg1.png";
+import avt from "../../../assets/img/logosign.png";
+import bg from "../../../assets/img/bg1.png";
 
 const signupSchema = yup.object().shape({
   email: yup
@@ -48,15 +48,27 @@ const signupSchema = yup.object().shape({
 
 export default function Signup() {
   // useNavigate manage navigate button
-
   const navigate = useNavigate();
-
   // useState manage show password and show ConfirmPassword
-
   const [showPassword, setShowPassword] = useState(false);
 
-  // useMutation manage handle signup
+  //useForm manage form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      passWord: "",
+      name: "",
+      phoneNumber: "",
+    },
+    mode: "onTouched",
 
+    resolver: yupResolver(signupSchema),
+  });
+  // useMutation manage handle signup
   const {
     mutate: handelSignup,
     error,
@@ -69,17 +81,6 @@ export default function Signup() {
     onSuccess: () => {
       navigate("/signin");
     },
-  });
-
-  //useForm manage form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onTouched",
-
-    resolver: yupResolver(signupSchema),
   });
 
   const onSubmit = (values) => {
@@ -152,7 +153,7 @@ export default function Signup() {
               placeholder="Name"
               type="text"
               id="name"
-              {...register("name")}
+              {...register("passWord")}
               InputProps={{
                 startAdornment: <AccountCircle />,
               }}
@@ -201,14 +202,8 @@ export default function Signup() {
             >
               <Typography fontSize={13}>
                 Already have an account?
-                <Button
-                  type="button"
-                  onClick={() => {
-                    navigate("/signin");
-                  }}
-                >
+                <Button type="button" onClick={() => navigate("/sign-in")}>
                   <Typography fontSize={13} textTransform={"none"}>
-                    {" "}
                     Signin now
                   </Typography>
                 </Button>

@@ -11,6 +11,7 @@ import { signin } from "../../../../apis/userAPI";
 import { useUserContext } from "../../../../contexts/UserContext/UserContext";
 import avt from "../../../../assets/img/logosign.png";
 import bg from "../../../../assets/img/bg1.png";
+import Swal from "sweetalert2";
 import {
   Grid,
   Paper,
@@ -150,7 +151,6 @@ export default function Signin() {
               fullWidth
               variant="contained"
               color="primary"
-              disabled={isLoading}
             >
               Đăng nhập
             </CusButton>

@@ -85,3 +85,15 @@ export const deleteUserFromProject = async (payload) => {
     throw error.response.data;
   }
 };
+// edit user
+export const editUser = async (userId) => {
+  try {
+    const response = await fetcher.put("/Users/editUser", {
+      params: {
+        userId: userId,
+      },
+    });
+  } catch (error) {
+    throw error.response.data;
+  }
+};
