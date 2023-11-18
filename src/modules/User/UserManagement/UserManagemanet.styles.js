@@ -5,15 +5,15 @@ export const ButtonMain = styled.button`
   font-weight: bold;
   padding: 10px 15px;
   border-radius: 8px;
-  border: 2px solid #FF8E53;
-  background-color: #FE6B8B;
+  border: 2px solid #ff8e53;
+  background-color: #fe6b8b;
   color: #ffff;
   transition: all 0.5s;
   cursor: pointer;
   &:hover {
     color: white;
     background-color: #8b0623;
-    border: 2px dashed #FF8E53;
+    border: 2px dashed #ff8e53;
   }
 `;
 

@@ -162,6 +162,14 @@ export default function Navbar() {
               </NavListButton>
             </ListItem>
           )}
+
+          <ListItem disablePadding>
+            <NavListButton onClick={() => navigate("/usermanagement")}>
+              <Text>
+                <CreateIcon sx={{ marginRight: 2 }} /> User Management
+              </Text>
+            </NavListButton>
+          </ListItem>
         </List>
         <Divider />
         <List>
