@@ -11,7 +11,7 @@ export default function BoardContent({
   setItems,
   handleUpdateStatus,
 }) {
-  console.log("DATA", data);
+  // console.log("DATA", data);
 
   const handleDragAndDrop = (result) => {
     const { source, destination, draggableId, type, taskId } = result;
@@ -50,26 +50,26 @@ export default function BoardContent({
       handleUpdateStatus([findTaskId.taskId, destinationStatus]);
     }
 
-    if (source.droppableId === destination.droppableId) {
-      console.log("GIỐNG NHAU RỒI ĐÓ");
-      // Kéo mục trong cùng một nhóm
+    // if (source.droppableId === destination.droppableId) {
+    //   console.log("GIỐNG NHAU RỒI ĐÓ");
+    //   // Kéo mục trong cùng một nhóm
 
-      const updatedItems = { ...items };
+    //   const updatedItems = { ...items };
 
-      const updatedGroup = [...updatedItems[source.droppableId]];
+    //   const updatedGroup = [...updatedItems[source.droppableId]];
 
-      updatedGroup.splice(source.index, 1);
-      updatedGroup.splice(
-        destination.index,
-        0,
-        items[source.droppableId][source.index]
-      );
+    //   updatedGroup.splice(source.index, 1);
+    //   updatedGroup.splice(
+    //     destination.index,
+    //     0,
+    //     items[source.droppableId][source.index]
+    //   );
 
-      updatedItems[source.droppableId] = updatedGroup;
-      setItems(updatedItems);
-    }
+    //   updatedItems[source.droppableId] = updatedGroup;
+    //   setItems(updatedItems);
+    // }
     // else {
-    //   // Kéo mục qua các nhóm khác nhau
+    // Kéo mục qua các nhóm khác nhau
     //   console.log("LẠI KHÁC NỮA RỒI ĐÓ");
     //   const sourceGroup = [...items[source.droppableId]];
     //   const destGroup = [...items[destination.droppableId]];
