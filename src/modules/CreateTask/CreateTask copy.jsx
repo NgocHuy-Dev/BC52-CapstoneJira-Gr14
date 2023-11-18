@@ -35,7 +35,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { EditBox, CusAlert } from "./CreateTask.styles";
+import { EditBox, CusLable, CusAlert } from "./CreateTask.styles";
+import Swal from "sweetalert2";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 const createTaskSchema = yup.object().shape({
@@ -122,7 +123,6 @@ export default function CreateTask() {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
     const newValues = {
       ...values,
       originalEstimate: Number(values.originalEstimate),
@@ -166,7 +166,7 @@ export default function CreateTask() {
   useEffect(() => {
     if (projectDetail || allProject) {
       setValue("projectId", projectId.toString());
-      // setValue("statusId", projectDetail.lstTask[0].statusId);
+      setValue("statusId", projectDetail.lstTask[0].statusId);
       setValue("priorityId", priority[0]?.priorityId);
       setValue("typeId", taskType[0]?.id);
     }
@@ -215,11 +215,6 @@ export default function CreateTask() {
   ////////////
 
   //------------------------------------------------------------------
-  const [projectName, setProjectName] = useState();
-
-  const handleChange = (event) => {
-    setProjectName(event.target.value);
-  };
 
   return (
     <Container maxWidth="md" sx={{ height: "100vh" }}>
@@ -233,28 +228,46 @@ export default function CreateTask() {
           >
             <Grid item xs={6}>
               {/* Project Name */}
-              <Box>
-                <label htmlFor="projectId">
+              <Box width={"100%"}>
+                <CusLable htmlFor="projectId">
                   <Typography variant="p">Project Name</Typography>
-                </label>
-                <FormControl sx={{ width: "100%" }}>
-                  <Select {...register("projectName")} fullWidth>
-                    {allProject.map((option) => {
-                      return (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.projectName}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                </CusLable>
+                <FormControl size="small" fullWidth>
+                  <Controller
+                    name="projectId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select labelId="projectId" id="projectId" {...field}>
+                        {allProject.map((project) => {
+                          return (
+                            <Box sx={{ maxHeight: "200px" }}>
+                              <MenuItem
+                                MenuProps={{
+                                  PaperProps: {
+                                    style: {
+                                      maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                                    },
+                                  },
+                                }}
+                                key={project.id}
+                                value={project.id}
+                              >
+                                {project.projectName}
+                              </MenuItem>
+                            </Box>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
               </Box>
 
               {/* Prioritys */}
               <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-                <label htmlFor="priorityId">
+                <CusLable htmlFor="priorityId">
                   <Typography variant="p">Priority</Typography>
-                </label>
+                </CusLable>
                 <FormControl fullWidth size="small">
                   <Controller
                     name="priorityId"
@@ -292,9 +305,9 @@ export default function CreateTask() {
               {/* Task Name */}
 
               <Box>
-                <label htmlFor="taskName">
+                <CusLable htmlFor="taskName">
                   <Typography variant="p">Task Name</Typography>
-                </label>
+                </CusLable>
                 <TextField
                   size="small"
                   id="taskName"
@@ -308,10 +321,10 @@ export default function CreateTask() {
               </Box>
 
               {/* Task Type */}
-              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-                <label htmlFor="typeId">
-                  <Typography variant="p">Task Type</Typography>
-                </label>
+              <Box>
+                <CusLable htmlFor="typeId">
+                  <Typography variant="p">Issue Type</Typography>
+                </CusLable>
                 <FormControl fullWidth size="small">
                   <Controller
                     name="typeId"
@@ -324,7 +337,7 @@ export default function CreateTask() {
                         MenuProps={{
                           PaperProps: {
                             style: {
-                              maxHeight: 200,
+                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
                             },
                           },
                         }}
@@ -388,9 +401,9 @@ export default function CreateTask() {
               {/* Asign */}
               {Object.keys(projectDetail).length > 0 && (
                 <Box sx={{ width: "100%" }}>
-                  <label htmlFor="listUserAsign">
+                  <CusLable htmlFor="listUserAsign">
                     <Typography variant="p">Assignees</Typography>
-                  </label>
+                  </CusLable>
                   <FormControl fullWidth size="small">
                     <InputLabel id="listUserAsign-label">
                       Select assignees
@@ -448,9 +461,9 @@ export default function CreateTask() {
               {/*  original Estimate*/}
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Box>
-                  <label htmlFor="originalEstimate">
+                  <CusLable htmlFor="originalEstimate">
                     <Typography variant="p">Original Estimate</Typography>
-                  </label>
+                  </CusLable>
                   <Controller
                     name="originalEstimate"
                     control={control}

@@ -28,7 +28,7 @@ function App() {
                 element={<ProjectDetail />}
               />
               <Route path="/createproject" element={<CreateProject />} />
-              <Route path="/createtask" element={<CreateTask />} />
+              <Route path="/createtask/:projectId" element={<CreateTask />} />
               <Route path="/edittask/:taskId" element={<EditTask />} />
               <Route path="/user/management" element={<UserManagement />} />
               {/* <Route path="/user/edit/:userId" element={<EditUser />} /> */}

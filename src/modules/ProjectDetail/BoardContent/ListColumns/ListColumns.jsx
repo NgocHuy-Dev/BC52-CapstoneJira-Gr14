@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function ListColumns({ lstTask }) {
-  console.log("list Task in LIST COLUMN", lstTask);
+  // console.log("list Task in LIST COLUMN", lstTask);
   return (
     <Box
       sx={{

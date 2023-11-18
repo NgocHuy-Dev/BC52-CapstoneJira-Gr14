@@ -16,7 +16,7 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import FolderIcon from "@mui/icons-material/Folder";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import { Text, NavListButton } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext/UserContext";
 import avt from "../../assets/img/meme-khoc_33.webp";
 import cyberlogo from "../../assets/img/cybersoft logo.jpeg";
@@ -30,6 +30,8 @@ const drawerWidth = 270;
 
 export default function Navbar() {
   const { currentUser, handleSignout } = useUserContext();
+  const { projectId } = useParams();
+
   const navigate = useNavigate();
 
   const handleSignin = () => {
@@ -149,13 +151,17 @@ export default function Navbar() {
             </NavListButton>
           </ListItem>
 
-          <ListItem disablePadding>
-            <NavListButton onClick={() => navigate("/createtask")}>
-              <Text>
-                <DrawIcon sx={{ marginRight: 2 }} /> Create Task
-              </Text>
-            </NavListButton>
-          </ListItem>
+          {projectId && Object.keys(projectId).length > 0 && (
+            <ListItem disablePadding>
+              <NavListButton
+                onClick={() => navigate(`/createtask/${projectId}`)}
+              >
+                <Text>
+                  <DrawIcon sx={{ marginRight: 2 }} /> Create Task
+                </Text>
+              </NavListButton>
+            </ListItem>
+          )}
         </List>
         <Divider />
         <List>
