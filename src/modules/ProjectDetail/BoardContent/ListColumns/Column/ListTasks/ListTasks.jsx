@@ -6,6 +6,7 @@ import Task from "./Task/Task";
 import { Draggable } from "react-beautiful-dnd";
 
 export default function ListTasks({ listTasks }) {
+  console.log("list task ", listTasks);
   return (
     <Box
       sx={{

@@ -46,7 +46,7 @@ const createTaskSchema = yup.object().shape({
   originalEstimate: yup.number(),
   timeTrackingSpent: yup.number(),
   timeTrackingRemaining: yup.number(),
-  projectId: yup.number(),
+
   typeId: yup.number(),
   priorityId: yup.number(),
 });
@@ -65,13 +65,13 @@ export default function CreateTask() {
 
   ///////////////////////////////Time tracking//////////////////////////////////////////////
 
-  const handleChangeTimeline = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleChangeTimeline = (event, newValue) => {
+  //   setValue(newValue);
+  // };
 
-  const handleInputChange = (event) => {
-    setValue(event.target.value === "" ? "" : Number(event.target.value));
-  };
+  // const handleInputChange = (event) => {
+  //   setValue(event.target.value === "" ? "" : Number(event.target.value));
+  // };
 
   /////////////////////////////////////////////////////////////////////////
 
@@ -120,6 +120,8 @@ export default function CreateTask() {
     enabled: !!projectId,
   });
 
+  console.log("ALL STATUS", status);
+
   const { data: projectDetail = [] } = useQuery({
     queryKey: ["projectId", projectId],
     queryFn: () => getProjectDetail(projectId),
@@ -127,12 +129,15 @@ export default function CreateTask() {
 
   const { mutate: handleCreateTask, error } = useMutation({
     mutationFn: (values) => createTask(values),
+    onSuccess: () => {
+      navigate(`/projectdetail/${projectId}`);
+    },
   });
 
   const onSubmit = (values) => {
-    console.log(values);
     const newValues = {
       ...values,
+      statusId: values.statusId.toString(),
       originalEstimate: Number(values.originalEstimate),
       timeTrackingSpent: Number(values.timeTrackingSpent),
       timeTrackingRemaining: Number(values.timeTrackingRemaining),
@@ -174,7 +179,6 @@ export default function CreateTask() {
   useEffect(() => {
     if (projectDetail || allProject) {
       setValue("projectId", projectId.toString());
-      // setValue("statusId", projectDetail.lstTask[0].statusId);
       setValue("priorityId", priority[0]?.priorityId);
       setValue("typeId", taskType[0]?.id);
     }
@@ -250,20 +254,36 @@ export default function CreateTask() {
                 <label htmlFor="projectId">
                   <Typography variant="p">Project Name</Typography>
                 </label>
-                <FormControl size="small" fullWidth>
-                  <Select
-                    labelId="project-name-label"
-                    id="demo-multiple-name"
-                    value={projectName}
-                    onChange={handleChange}
-                    MenuProps={MenuProps}
-                  >
-                    {allProject.map((project) => (
-                      <MenuItem key={project.id} value={project.id}>
-                        {project.projectName}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                <FormControl fullWidth>
+                  <Controller
+                    name="projectId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        labelId="projectId"
+                        id="projectId"
+                        multiline
+                        value={projectName}
+                        onChange={handleChange}
+                        {...field}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                            },
+                          },
+                        }}
+                      >
+                        {allProject?.map((project) => {
+                          return (
+                            <MenuItem key={project.id} value={project.id}>
+                              {project.projectName}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
               </Box>
 

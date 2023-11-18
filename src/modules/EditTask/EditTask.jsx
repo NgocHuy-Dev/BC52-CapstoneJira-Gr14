@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getProjectDetail,
@@ -9,7 +9,7 @@ import {
   getTaskType,
   editTask,
   getTaskDetail,
-} from "../../apis/projectAPI";
+} from "./../../apis/projectAPI";
 import { getUsers, getUserByProjectId } from "../../apis/userAPI";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -21,19 +21,22 @@ import {
   Container,
   Box,
   FormControl,
+  InputLabel,
   Select,
   MenuItem,
   Typography,
   Grid,
   Slider,
   Chip,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, number, array } from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { EditBox, CusLable, CusAlert } from "./styled";
+import { EditBox, CusLable, CusAlert } from "./EditTask.style";
 import Swal from "sweetalert2";
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -51,7 +54,6 @@ const editTaskSchema = object({
 });
 
 export default function EditTask() {
-  const { taskId } = useParams();
   ///////////////////////////////Time tracking//////////////////////////////////////////////
 
   const [value, setValue] = React.useState(0);
