@@ -51,11 +51,7 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
-  // useState manage show password and show ConfirmPassword
-
   const [showPassword, setShowPassword] = useState(false);
-
-  // useMutation manage handle signup
 
   const {
     mutate: handelSignup,
@@ -67,7 +63,7 @@ export default function Signup() {
     },
     // chuyển sang trang đăng nhập (/signin)
     onSuccess: () => {
-      navigate("/signin");
+      navigate("/sign-in");
     },
   });
 
@@ -204,7 +200,7 @@ export default function Signup() {
                 <Button
                   type="button"
                   onClick={() => {
-                    navigate("/signin");
+                    navigate("/sign-in");
                   }}
                 >
                   <Typography fontSize={13} textTransform={"none"}>

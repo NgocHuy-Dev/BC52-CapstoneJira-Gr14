@@ -53,6 +53,10 @@ export default function EditDetail({ data, projectId }) {
 
   const { mutate: handleUpdate, error } = useMutation({
     mutationFn: (formData) => updateProject(projectId, formData),
+    onSuccess: () => {
+      navigate("/");
+      Swal.fire("Cập nhật thành công!", "", "success");
+    },
   });
 
   const onSubmit = (formData) => {
@@ -63,10 +67,7 @@ export default function EditDetail({ data, projectId }) {
 
     const formatedValue = { ...formData, description: newDes };
 
-    console.log("data submit", formatedValue);
     handleUpdate(formatedValue);
-
-    Swal.fire("Tạo dự án thành công!", "", "success");
   };
 
   // ======= xử lý Select  =====================

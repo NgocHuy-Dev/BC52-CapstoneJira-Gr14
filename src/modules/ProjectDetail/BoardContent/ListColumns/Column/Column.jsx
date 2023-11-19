@@ -63,7 +63,6 @@ export default function Column({ tasks }) {
           justifyContent: "space-between",
         }}
       >
-        <Button startIcon={<AddCardIcon />}>Create Task</Button>
         <Tooltip title="Drag to move">
           <DragHandleIcon sx={{ cursor: "grab" }} />
         </Tooltip>

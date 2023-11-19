@@ -244,7 +244,7 @@ export default function CreateTask() {
               </Box>
 
               {/* Prioritys */}
-              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
+              <Box>
                 <label htmlFor="priorityId">
                   <Typography variant="p">Priority</Typography>
                 </label>
