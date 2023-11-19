@@ -24,7 +24,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import DrawIcon from "@mui/icons-material/Draw";
-import { red } from "@mui/material/colors";
 
 const drawerWidth = 253;
 
@@ -68,7 +67,15 @@ export default function Navbar() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar sx={{ display: "flex", flexDirection: "column" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            position: "static",
+            minHeight: "180px",
+            maxHeight: "180px",
+          }}
+        >
           <Box sx={{ height: "80px" }}>
             <Avatar
               src={cyberlogo}
