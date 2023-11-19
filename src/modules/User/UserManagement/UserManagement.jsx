@@ -100,11 +100,11 @@ export default function UserManagement() {
 
   const columns = [
     { field: "userId", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Tên", width: 200 },
+    { field: "name", headerName: "Name", width: 200 },
 
     {
       field: "avatar",
-      headerName: "Ảnh đại diện",
+      headerName: "Avatar",
       width: 130,
       renderCell: (params) => (
         <img
@@ -115,11 +115,11 @@ export default function UserManagement() {
       ),
     },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "phoneNumber", headerName: "Số điện thoại", width: 200 },
+    { field: "phoneNumber", headerName: "Phone number", width: 200 },
 
     {
       field: "action",
-      headerName: "Hành động",
+      headerName: "Action",
       width: 130,
       renderCell: (params) => (
         <div>
@@ -187,10 +187,61 @@ export default function UserManagement() {
     return <Loading />;
   }
 
-  //////////////////////
   return (
     <>
-      {/* /////////////////////////////////////////////////////////////////// */}
+      {/* /////////////////////////////////Search//////////////////////////////////////////////// */}
+
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", padding: 2 }}
+      >
+        <Box>
+          <Typography
+            sx={{ fontSize: "30px", fontWeight: "bold", color: "#FE6B8B" }}
+          >
+            User Management
+          </Typography>
+        </Box>
+        <Box>
+          <TextField
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}
+            style={{
+              backgroundColor: "lavender",
+              marginLeft: "50px",
+              height: "55px",
+            }}
+          />
+          <ButtonMain
+            onClick={() => handleSearch()}
+            style={{ marginLeft: "5px", height: "55px" }}
+          >
+            Search
+          </ButtonMain>
+        </Box>
+      </Box>
+
+      <div style={{ height: 580, width: "100%" }}>
+        <DataGrid
+          // rows={rows}
+          // thiet lap de search
+          rows={rows.filter((row) =>
+            Object.values(row).some(
+              (value) => String(value).indexOf(searchText) > -1
+            )
+          )}
+          getRowId={(row) => row.userId}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 9 },
+            },
+          }}
+          // pageSizeOptions={[9, 10]}
+          checkboxSelection
+        />
+      </div>
 
       {/* Modal edit user */}
       {isOpen && (
@@ -281,48 +332,6 @@ export default function UserManagement() {
           </Box>
         </Box>
       )}
-
-      {/* /////////////////////////////////Search//////////////////////////////////////////////// */}
-
-      <TextField
-        type="text"
-        placeholder="Search..."
-        value={searchText}
-        onChange={(event) => setSearchText(event.target.value)}
-        style={{
-          backgroundColor: "lavender",
-          marginLeft: "50px",
-          height: "55px",
-        }}
-      />
-      <ButtonMain
-        onClick={() => handleSearch()}
-        style={{ marginLeft: "5px", height: "55px" }}
-      >
-        Search
-      </ButtonMain>
-
-      {/* /////////////////////////////////////////////////////////////// */}
-      <div style={{ height: 580, width: "100%" }}>
-        <DataGrid
-          // rows={rows}
-          // thiet lap de search
-          rows={rows.filter((row) =>
-            Object.values(row).some(
-              (value) => String(value).indexOf(searchText) > -1
-            )
-          )}
-          getRowId={(row) => row.userId}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 9 },
-            },
-          }}
-          // pageSizeOptions={[9, 10]}
-          checkboxSelection
-        />
-      </div>
     </>
   );
 }
