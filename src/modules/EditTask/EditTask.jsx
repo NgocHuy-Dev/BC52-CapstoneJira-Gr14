@@ -7,12 +7,10 @@ import {
   getStatus,
   getPriority,
   getTaskType,
-  editTask,
-  getTaskDetail,
-} from "./../../apis/projectAPI";
+  createTask,
+} from "../../apis/projectAPI";
 import { getUsers, getUserByProjectId } from "../../apis/userAPI";
-
-import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 import {
@@ -33,150 +31,155 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { object, string, number, array } from "yup";
+import * as yup from "yup";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { EditBox, CusLable, CusAlert } from "./EditTask.style";
-import Swal from "sweetalert2";
+import { EditBox, CusAlert } from "./EditTask.style.js";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const editTaskSchema = object({
-  listUserAsign: array().min(1),
-  taskName: string().required("Tên nhiệm vụ là bắt buộc"),
-  description: string().required("Mô tả là bắt buộc"),
-  statusId: string().required("Status là bắt buộc"),
-  originalEstimate: number(),
-  timeTrackingSpent: number(),
-  timeTrackingRemaining: number(),
-  projectId: number(),
-  typeId: number(),
-  priorityId: number(),
+const createTaskSchema = yup.object().shape({
+  listUserAsign: yup.array(),
+  taskName: yup.string().required("Tên nhiệm vụ là bắt buộc"),
+  description: yup.string().required("Mô tả là bắt buộc"),
+  statusId: yup.number().required("Status là bắt buộc"),
+  originalEstimate: yup.number(),
+  timeTrackingSpent: yup.number(),
+  timeTrackingRemaining: yup.number(),
+
+  typeId: yup.number(),
+  priorityId: yup.number(),
 });
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 300,
+    },
+  },
+};
+
 export default function EditTask() {
-  ///////////////////////////////Time tracking//////////////////////////////////////////////
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChangeTimeline = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleInputChange = (event) => {
-    setValue(event.target.value === "" ? "" : Number(event.target.value));
-  };
-
-  const handleBlur = () => {
-    if (value < 0) {
-      setValue(0);
-    } else if (value > 100) {
-      setValue(100);
-    }
-  };
-
-  /////////////////////////////////////////////////////////////////////////
+  const { projectId } = useParams();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm({
-    // defaultValues: {
-    //   id: data.id,
-    //   projectName: data.projectName,
-    //   creator: data.creator,
-    //   description: data.description,
-    //   categoryId: data.categoryId,
-    // },
-    resolver: yupResolver(editTaskSchema),
+    defaultValues: {
+      taskName: "",
+      projectId: "",
+      statusId: "",
+      priorityId: "",
+      typeId: "",
+      listUserAsign: [],
+      originalEstimate: 0,
+      timeTrackingSpent: 0,
+      timeTrackingRemaining: 0,
+      description: "",
+    },
+    resolver: yupResolver(createTaskSchema),
     mode: "onTouched",
   });
 
-  const {
-    mutate: handleEditTask,
-    isLoading,
-    error,
-  } = useMutation({
-    mutationFn: (payload) => editTask(payload),
-    onSuccess: (data) => {},
+  // gọi data
+  const { data: allProject = [], isLoading } = useQuery({
+    queryKey: ["createTask"],
+    queryFn: getAllProject,
+    enabled: !!projectId,
   });
 
-  const onSubmit = (dataSubmit) => {
-    // clean special value
-    const cleanedData = Object.fromEntries(
-      Object.entries(dataSubmit).map(([key, value]) => {
-        if (typeof value === "string") {
-          return [key, value.replace(/<p>/g, "").replace(/<\/p>/g, "")];
-        }
-        return [key, value];
-      })
-    );
-    console.log(cleanedData);
-
-    // Swal.fire("Đăng nhập thành công!", "", "success");
-    toast.success("Edit tast success!", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-    handleEditTask(cleanedData);
-    console.log(cleanedData);
-  };
-
-  // ======= xử lý Select  =====================
-  const [name, setName] = useState("");
-
-  const handleChange = (event) => {
-    setName(event.target.value);
-  };
-
-  //=======================
-
-  // project name
-
-  const [selectedprojectOption, setSelectedprojectOption] = useState("");
-
-  const { data: projects = [], isLoading: loading } = useQuery({
-    queryKey: ["projects"],
-    queryFn: (payload) => getTaskDetail(payload),
-    onSuccess: () => {
-      setSelectedprojectOption(projects);
-    },
+  const { data: priority = [] } = useQuery({
+    queryKey: ["priority"],
+    queryFn: getPriority,
+    enabled: !!projectId,
   });
-
-  // Status
-
-  const [selectedStatusOption, setSelectedStatusOption] = useState("");
-
-  const { data: status = [], isLoading: loadingStatus } = useQuery({
+  const { data: taskType = [] } = useQuery({
+    queryKey: ["taskType"],
+    queryFn: getTaskType,
+  });
+  const { data: status = [] } = useQuery({
     queryKey: ["status"],
     queryFn: getStatus,
+    enabled: !!projectId,
+  });
+
+  console.log("ALL STATUS", status);
+
+  const { data: projectDetail = [] } = useQuery({
+    queryKey: ["projectId", projectId],
+    queryFn: () => getProjectDetail(projectId),
+  });
+
+  const { mutate: handleCreateTask, error } = useMutation({
+    mutationFn: (values) => createTask(values),
     onSuccess: () => {
-      setSelectedStatusOption(status);
+      navigate(`/projectdetail/${projectId}`);
     },
   });
 
-  // Priority
+  const onSubmit = (values) => {
+    console.log("VAlue", values);
+    // const newValues = {
+    //   ...values,
+    //   statusId: values.statusId.toString(),
+    //   originalEstimate: Number(values.originalEstimate),
+    //   timeTrackingSpent: Number(values.timeTrackingSpent),
+    //   timeTrackingRemaining: Number(values.timeTrackingRemaining),
+    // };
+    // handleCreateTask(newValues);
+  };
 
-  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
+  function getMemberNameById(memberId) {
+    const member = projectDetail?.members.find(
+      (member) => member.userId === memberId
+    );
+    return member ? member.name : "";
+  }
 
-  const { data: prioritys = [], isLoading: loadingPriority } = useQuery({
-    queryKey: ["prioritys"],
-    queryFn: getPriority,
-    onSuccess: () => {
-      setSelectedPriorityOption(prioritys);
-    },
-  });
-  // Task Type
+  const [valueTimeSpent, setValueTimeSpent] = useState(0);
+  const [valueTimeRemaining, setValueTimeRemaining] = useState(0);
+  const [valueOriginalEstimate, setValueOriginalEstimate] = useState(0);
 
-  const [selectedTaskTypeOption, setSelectedTaskTypeOption] = useState("");
+  const RemainingAndEstimate = (Remaining, Estimate) => {
+    if (Remaining) {
+      if (Remaining > 0) {
+        return <Typography>{Remaining}h remaining</Typography>;
+      } else {
+        return <Typography>0h remaining</Typography>;
+      }
+    } else if (Estimate) {
+      if (Remaining > 0) {
+        return <Typography>{Remaining}h remaining</Typography>;
+      } else if (Estimate > 0) {
+        return <Typography>{Estimate}h estimate</Typography>;
+      } else {
+        return <Typography>0h remaining</Typography>;
+      }
+    } else {
+      return <Typography>0h remaining</Typography>;
+    }
+  };
 
-  const { data: tasktypes = [], isLoading: loadingTaskType } = useQuery({
-    queryKey: ["tasktypes"],
-    queryFn: getTaskType,
-    onSuccess: () => {
-      setSelectedTaskTypeOption(tasktypes);
-    },
-  });
+  useEffect(() => {
+    if (projectDetail || allProject) {
+      setValue("projectId", projectId.toString());
+      setValue("priorityId", priority[0]?.priorityId);
+      setValue("typeId", taskType[0]?.id);
+    }
+  }, [setValue, projectDetail, projectId, allProject, priority, taskType]);
+
+  // ===== Tiny =============
+  const editorRef = useRef(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
+  //=======================
 
   // User Asign
 
@@ -212,10 +215,20 @@ export default function EditTask() {
   ////////////
 
   //------------------------------------------------------------------
+  const [projectName, setProjectName] = useState();
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setProjectName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
   return (
     <Container maxWidth="md" sx={{ height: "100vh" }}>
-      <h3>Edit Task</h3>
+      <h3>Create Task</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <EditBox>
           <Grid
@@ -225,105 +238,170 @@ export default function EditTask() {
           >
             <Grid item xs={6}>
               {/* Project Name */}
-              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-                <CusLable id="projectName">Project Name</CusLable>
-
-                <FormControl sx={{ minWidth: "55%" }}>
-                  <Select {...register("projectName")} fullWidth>
-                    {projects.map((option) => {
-                      return (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.projectName}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+              <Box>
+                <label htmlFor="projectId">
+                  <Typography variant="p">Project Name</Typography>
+                </label>
+                <FormControl fullWidth>
+                  <Controller
+                    name="projectId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        labelId="projectId"
+                        id="projectId"
+                        multiline
+                        value={projectName}
+                        onChange={handleChange}
+                        {...field}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                            },
+                          },
+                        }}
+                      >
+                        {allProject?.map((project) => {
+                          return (
+                            <MenuItem key={project.id} value={project.id}>
+                              {project.projectName}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
-                {errors.projectName && (
-                  <CusAlert variant="a">{errors.projectName.message}</CusAlert>
-                )}
               </Box>
 
               {/* Prioritys */}
               <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-                <CusLable id="priorityId"> Priority </CusLable>
-
-                <FormControl sx={{ minWidth: "55%" }}>
-                  <Select {...register("priorityId")} fullWidth>
-                    {prioritys.map((option) => {
-                      return (
-                        <MenuItem
-                          key={option.priorityId}
-                          value={option.priorityId}
-                        >
-                          {option.priority}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                <label htmlFor="priorityId">
+                  <Typography variant="p">Priority</Typography>
+                </label>
+                <FormControl fullWidth size="small">
+                  <Controller
+                    name="priorityId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        labelId="priorityId"
+                        id="priorityId"
+                        {...field}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                            },
+                          },
+                        }}
+                      >
+                        {priority.map((item) => {
+                          return (
+                            <MenuItem
+                              key={item.priorityId}
+                              value={item.priorityId}
+                            >
+                              {item.priority}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
-                {errors.priorityId && (
-                  <CusAlert variant="a">{errors.priorityId.message}</CusAlert>
-                )}
               </Box>
             </Grid>
             <Grid item xs={6}>
               {/* Task Name */}
 
-              <Box sx={{ minWidth: "80%" }}>
-                <CusLable id="taskName">Task Name</CusLable>
+              <Box>
+                <label htmlFor="taskName">
+                  <Typography variant="p">Task Name</Typography>
+                </label>
                 <TextField
-                  margin="normal"
-                  required
-                  name="taskName"
-                  autoFocus
+                  size="small"
+                  id="taskName"
+                  variant="outlined"
+                  fullWidth
+                  placeholder="Name task..."
                   {...register("taskName")}
+                  error={!!errors.taskName}
+                  helperText={errors.taskName?.message}
                 />
-                {errors.taskName && (
-                  <CusAlert variant="a">{errors.taskName.message}</CusAlert>
-                )}
               </Box>
 
               {/* Task Type */}
-              <Box sx={{}}>
-                <CusLable id="typeId"> Task Type </CusLable>
-
-                <FormControl sx={{ minWidth: "55%" }}>
-                  <Select {...register("typeId")} fullWidth>
-                    {tasktypes.map((option) => {
-                      return (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.taskType}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+              <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
+                <label htmlFor="typeId">
+                  <Typography variant="p">Task Type</Typography>
+                </label>
+                <FormControl fullWidth size="small">
+                  <Controller
+                    name="typeId"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        labelId="typeId"
+                        id="typeId"
+                        {...field}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        }}
+                      >
+                        {taskType.map((type) => {
+                          return (
+                            <MenuItem key={type.id} value={type.id}>
+                              {type.taskType}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
-                {errors.typeId && (
-                  <CusAlert variant="a">{errors.typeId.message}</CusAlert>
-                )}
               </Box>
             </Grid>
           </Grid>
 
           {/* Status */}
-          <Box sx={{ marginBottom: "8px", marginTop: "16px" }}>
-            <CusLable id="statusId">Status</CusLable>
-
-            <FormControl sx={{ minWidth: "30%" }} fullWidth>
-              <Select {...register("statusId")}>
-                {status.map((option) => {
-                  return (
-                    <MenuItem key={option.statusId} value={option.statusId}>
-                      {option.statusName}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+          <Box width={"100%"}>
+            <label htmlFor="statusId">
+              <Typography variant="p">Status Type</Typography>
+            </label>
+            <FormControl fullWidth size="small">
+              <Controller
+                name="statusId"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    labelId="statusId"
+                    id="statusId"
+                    {...field}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                        },
+                      },
+                    }}
+                  >
+                    {status.map((status) => {
+                      return (
+                        <MenuItem key={status.statusId} value={status.statusId}>
+                          {status.statusName}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                )}
+              />
             </FormControl>
-            {errors.statusId && (
-              <CusAlert variant="a">{errors.statusId.message}</CusAlert>
-            )}
           </Box>
 
           <Grid
@@ -333,144 +411,246 @@ export default function EditTask() {
           >
             <Grid item xs={6}>
               {/* Asign */}
-              <Box sx={{ marginBottom: "8px", marginTop: "10px" }}>
-                <CusLable id="listUserAsign"> Asignees </CusLable>
-
-                <FormControl sx={{ minWidth: "55%" }}>
-                  <Select
-                    {...register("listUserAsign")}
-                    fullWidth
-                    multiple
-                    multiline
-                    value={choices}
-                    onChange={handleChangeChoice}
-                    renderValue={(selected) => (
-                      <div style={{ display: "flex", flexWrap: "wrap" }}>
-                        {selected.map((choice) => (
-                          <Chip
-                            key={choice}
-                            label={choice}
-                            onDelete={() => handleDelete(choice)}
-                            // onDelete={()=>handleDelete}
-                            deleteIcon={<CancelIcon />}
-                            style={{ margin: "2px" }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  >
-                    {userasigns.map((option) => {
-                      return (
-                        <MenuItem key={option.userId} value={option.userId}>
-                          <img
-                            src={option.avatar}
-                            width={25}
-                            height={25}
-                            style={{ borderRadius: "50%", margin: "2px" }}
-                          />{" "}
-                          {"  "} {option.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-
-                {errors.listUserAsign && (
-                  <CusAlert variant="a">
-                    {errors.listUserAsign.message}
-                  </CusAlert>
-                )}
-              </Box>
+              {Object.keys(projectDetail).length > 0 && (
+                <Box sx={{ width: "100%" }}>
+                  <label htmlFor="listUserAsign">
+                    <Typography variant="p">Assignees</Typography>
+                  </label>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="listUserAsign-label">
+                      Select assignees
+                    </InputLabel>
+                    <Controller
+                      name="listUserAsign"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          labelId="listUserAsign-label"
+                          id="listUserAsign"
+                          multiple
+                          {...field}
+                          MenuProps={{
+                            PaperProps: {
+                              style: {
+                                maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                              },
+                            },
+                          }}
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip
+                                  key={value}
+                                  label={getMemberNameById(value)}
+                                />
+                              ))}
+                            </Box>
+                          )}
+                        >
+                          {projectDetail.members.map((member) => {
+                            return (
+                              <MenuItem
+                                key={member.userId}
+                                value={member.userId}
+                              >
+                                {member.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      )}
+                    />
+                  </FormControl>
+                </Box>
+              )}
 
               {/*  original Estimate*/}
-              <Box sx={{ marginBottom: "5px" }}>
-                <CusLable id="typeId"> Original Estimate </CusLable>
-                <TextField
-                  sx={{ minWidth: "55%" }}
-                  variant="outlined"
-                  margin="normal"
-                  {...register("originalEstimate")}
-                  // name="originalEstimate"
-                  // label="originalEstimate"
-                  // defaultValue={projectName}
-                  error={!!errors.originalEstimate}
-                  helperText={errors.originalEstimate?.message}
-                  type="number"
-                  inputProps={{ min: 0 }}
-                />
-                {errors.originalEstimate && (
-                  <CusAlert variant="a">
-                    {errors.originalEstimate.message}
-                  </CusAlert>
-                )}
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box>
+                  <label htmlFor="originalEstimate">
+                    <Typography variant="p">Original Estimate</Typography>
+                  </label>
+                  <Controller
+                    name="originalEstimate"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        size="small"
+                        id="originalEstimate"
+                        variant="outlined"
+                        fullWidth
+                        placeholder="0"
+                        value={field.value}
+                        onInput={(e) => {
+                          const newValue = e.target.value;
+
+                          const sanitizedValue = newValue.replace(
+                            /[e+-]/gi,
+                            ""
+                          );
+
+                          if (/^[0-9]*$/.test(sanitizedValue)) {
+                            field.onChange(sanitizedValue);
+                            setValueOriginalEstimate(Number(sanitizedValue));
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={6}>
-              <Typography paddingLeft={"30%"}> Time Tracking</Typography>
-
-              <Slider
-                value={typeof value === "number" ? value : 0}
-                onChange={handleChange}
-                aria-labelledby="input-slider"
-                min={0}
-                max={10}
-              />
-
-              <Box display={"flex"}></Box>
-
-              {/* /////////////////////////////////////////////////////////////////// */}
-
-              <Box display={"flex"}>
-                <span>Spent: </span>
-
-                <TextField
-                  {...register("timeTrackingSpent")}
-                  sx={{ maxWidth: "65%" }}
-                  variant="outlined"
-                  value={10 - value}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      min: 0,
-                      max: 10,
-                    },
-
-                    endAdornment: <span>logged</span>,
-                  }}
-                />
-                {errors.timeTrackingSpent && (
-                  <CusAlert variant="a">
-                    {errors.timeTrackingSpent.message}
-                  </CusAlert>
-                )}
-                <span style={{ paddingLeft: "23px" }}>Remaining: </span>
-                <TextField
-                  {...register("timeTrackingRemaining")}
-                  sx={{ maxWidth: "65%" }}
-                  variant="outlined"
-                  value={value}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      min: 0,
-                      max: 10,
-                    },
-
-                    endAdornment: <span>estimate </span>,
-                  }}
-                />
-                {errors.timeTrackingRemaining && (
-                  <CusAlert variant="a">
-                    {errors.timeTrackingRemaining.message}
-                  </CusAlert>
-                )}
+              {/* time tracking */}
+              <Box sx={{ width: "100%" }}>
+                <label htmlFor="timeTracking">
+                  <Typography variant="p">Time Tracking</Typography>
+                </label>
+                <Box sx={{ pl: 1 }}>
+                  <Slider
+                    onMouseDown={(e) => {
+                      if (true) {
+                        e.preventDefault();
+                      }
+                    }}
+                    sx={{
+                      "& .MuiSlider-thumb": {
+                        display: "none",
+                      },
+                    }}
+                    aria-labelledby="timeTracking-slider"
+                    valueLabelDisplay="auto"
+                    valueLabelFormat={(value) => `${value} hours`}
+                    step={1}
+                    min={0}
+                    max={
+                      Number(valueTimeRemaining) ||
+                      Number(valueOriginalEstimate)
+                    }
+                    value={Number(valueTimeSpent)}
+                    onChange={(event, newValue) => {
+                      // Cập nhật giá trị của valueTimeSpent khi Slider thay đổi
+                      setValueTimeSpent(Number(newValue));
+                    }}
+                  />
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {valueTimeSpent > 0 ? (
+                      <Typography>{valueTimeSpent}h logged</Typography>
+                    ) : (
+                      <Typography>0h logged</Typography>
+                    )}
+                    {RemainingAndEstimate(
+                      valueTimeRemaining,
+                      valueOriginalEstimate
+                    )}
+                  </Box>
+                </Box>
               </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "10px",
+                  width: "100%",
+                }}
+              >
+                {/* Time Spent */}
+                <Box width={"100%"}>
+                  <label htmlFor="timeTrackingSpent">
+                    <Typography
+                      variant="p"
+                      color={"rgb(32, 73, 138)"}
+                      fontWeight={"bold"}
+                    >
+                      Time Spent
+                    </Typography>
+                  </label>
+                  <Controller
+                    name="timeTrackingSpent"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        size="small"
+                        type="text"
+                        id="timeTrackingSpent"
+                        variant="outlined"
+                        fullWidth
+                        placeholder="0"
+                        value={field.value}
+                        onInput={(e) => {
+                          const newValue = e.target.value;
 
-              {/* ///////////////////////////////////////////////////////////// */}
+                          // Xóa các ký tự "e", "+", và "-" khỏi giá trị mới
+                          const sanitizedValue = newValue.replace(
+                            /[e+-]/gi,
+                            ""
+                          );
+
+                          // Kiểm tra giá trị mới sau khi xóa ký tự không hợp lệ
+                          if (/^[0-9]*$/.test(sanitizedValue)) {
+                            // Nếu giá trị hợp lệ (chỉ chứa các chữ số), thì cập nhật giá trị
+                            field.onChange(sanitizedValue);
+                            setValueTimeSpent(Number(sanitizedValue));
+                          }
+                          // Nếu giá trị không hợp lệ, không thực hiện thay đổi
+                        }}
+                      />
+                    )}
+                  />
+                </Box>
+                {/* Time Remaining */}
+                <Box width={"100%"}>
+                  <label htmlFor="timeTrackingRemaining">
+                    <Typography
+                      variant="p"
+                      color={"rgb(32, 73, 138)"}
+                      fontWeight={"bold"}
+                    >
+                      Time Remaining
+                    </Typography>
+                  </label>
+                  <Controller
+                    name="timeTrackingRemaining"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        size="small"
+                        type="text"
+                        id="timeTrackingRemaining"
+                        variant="outlined"
+                        fullWidth
+                        placeholder="0"
+                        value={field.value}
+                        onInput={(e) => {
+                          const newValue = e.target.value;
+
+                          // Xóa các ký tự "e", "+", và "-" khỏi giá trị mới
+                          const sanitizedValue = newValue.replace(
+                            /[e+-]/gi,
+                            ""
+                          );
+
+                          // Kiểm tra giá trị mới sau khi xóa ký tự không hợp lệ
+                          if (/^[0-9]*$/.test(sanitizedValue)) {
+                            // Nếu giá trị hợp lệ (chỉ chứa các chữ số), thì cập nhật giá trị
+                            field.onChange(sanitizedValue);
+                            setValueTimeRemaining(Number(sanitizedValue));
+                          }
+                          // Nếu giá trị không hợp lệ, không thực hiện thay đổi
+                        }}
+                      />
+                    )}
+                  />
+                </Box>
+              </Box>
             </Grid>
           </Grid>
 
@@ -479,21 +659,33 @@ export default function EditTask() {
             name="description"
             control={control}
             rules={{ required: "Vui lòng nhập nội dung" }}
-            render={({ field: { onChange } }) => (
+            render={({ field }) => (
               <Editor
-                value={htmlContent}
-                apiKey={process.env.REACT_APP_TINYMCE_KEY}
-                onEditorChange={(content) => {
-                  setHtmlContent(content);
-                  onChange(content);
-                }}
+                apiKey="rfmzf1ezo0i5w87f9fm8q1hk5rzfwi29ak9grgk8bnhden57"
+                onEditorChange={field.onChange}
+                value={field.value}
                 init={{
                   height: 200,
                   menubar: false,
                   plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table paste code help wordcount",
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
                   ],
                   toolbar:
                     "undo redo | formatselect | " +
@@ -506,12 +698,23 @@ export default function EditTask() {
               />
             )}
           />
-
-          {errors.description && <p>{errors.description.message}</p>}
         </EditBox>
 
-        <Button type="submit" variant="contained" color="primary">
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ marginRight: "12px" }}
+        >
           Create task
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/projectdetail")}
+        >
+          Cancel
         </Button>
       </form>
     </Container>

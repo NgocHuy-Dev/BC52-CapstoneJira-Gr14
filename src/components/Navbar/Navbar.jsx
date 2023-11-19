@@ -26,7 +26,7 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import DrawIcon from "@mui/icons-material/Draw";
 import { red } from "@mui/material/colors";
 
-const drawerWidth = 270;
+const drawerWidth = 253;
 
 export default function Navbar() {
   const { currentUser, handleSignout } = useUserContext();
@@ -49,7 +49,11 @@ export default function Navbar() {
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        sx={{
+          width: `calc(100% - ${drawerWidth}px)`,
+          ml: `${drawerWidth}px`,
+          backgroundColor: "#fff",
+        }}
       ></AppBar>
       <Drawer
         sx={{

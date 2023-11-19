@@ -1,18 +1,26 @@
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProject } from "../../apis/projectAPI";
 import Loading from "../../components/Loading/Loading";
-import { Typography } from "@mui/material";
+import { Typography, Box, Paper, InputBase } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { Creator } from "./style";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
 import Actions from "./Actions";
 import Members from "./Members/Members";
 
 export default function Home() {
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = () => {
+    console.log(`Searching for ${searchText}`);
+    // Your search logic here
+  };
   const navigate = useNavigate();
   const { data: allProject = [], isLoading } = useQuery({
     queryKey: ["project"],
@@ -32,7 +40,9 @@ export default function Home() {
           sx={{ cursor: "pointer" }}
           onClick={() => navigate(`/projectdetail/${params.row.id}`)}
         >
-          <Typography>{params.row.projectName}</Typography>
+          <Typography sx={{ color: "#556CD6", cursor: "pointer" }}>
+            {params.row.projectName}
+          </Typography>
         </Tooltip>
       ),
     },
@@ -76,11 +86,48 @@ export default function Home() {
   }
 
   return (
-    <div
-      style={{ height: 580, width: "97%", marginLeft: "2%", marginRight: "1%" }}
-    >
+    <div>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
+        <Typography
+          sx={{ fontSize: "30px", fontWeight: "bold", color: "#556CD6" }}
+        >
+          PROJECT MANAGEMENT
+        </Typography>
+        <Paper
+          component="form"
+          sx={{
+            p: "4px 4px",
+            mr: 1,
+            display: "flex",
+            alignItems: "center",
+            width: 200,
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "search" }}
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}
+          />
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+      </Box>
       <DataGrid
-        rows={allProject}
+        rows={allProject.filter((row) =>
+          Object.values(row).some(
+            (value) => String(value).indexOf(searchText) > -1
+          )
+        )}
         columns={columns}
         initialState={{
           pagination: {
