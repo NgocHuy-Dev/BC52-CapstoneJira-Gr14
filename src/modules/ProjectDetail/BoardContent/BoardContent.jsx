@@ -44,8 +44,45 @@ export default function BoardContent({ data, items, handleUpdateStatus }) {
       // Nếu công việc đã bị kéo vào một cột khác, gọi API để cập nhật trạng thái
       handleUpdateStatus([findTaskId.taskId, destinationStatus]);
     }
+
+    // if (source.droppableId === destination.droppableId) {
+    //   console.log("GIỐNG NHAU RỒI ĐÓ");
+    //   // Kéo mục trong cùng một nhóm
+
+    //   const updatedItems = { ...items };
+
+    //   const updatedGroup = [...updatedItems[source.droppableId]];
+
+    //   updatedGroup.splice(source.index, 1);
+    //   updatedGroup.splice(
+    //     destination.index,
+    //     0,
+    //     items[source.droppableId][source.index]
+    //   );
+
+    //   updatedItems[source.droppableId] = updatedGroup;
+    //   setItems(updatedItems);
+    // }
+    // else {
+    // Kéo mục qua các nhóm khác nhau
+    //   console.log("LẠI KHÁC NỮA RỒI ĐÓ");
+    //   const sourceGroup = [...items[source.droppableId]];
+    //   const destGroup = [...items[destination.droppableId]];
+    //   const [draggedItem] = sourceGroup.splice(source.index, 1);
+
+    //   destGroup.splice(destination.index, 0, draggedItem);
+
+    //   const updatedItems = {
+    //     ...items,
+    //     [source.droppableId]: sourceGroup,
+    //     [destination.droppableId]: destGroup,
+    //   };
+
+    //   setItems(updatedItems);
+    // }
   };
 
+  // console.log("main Stores", stores);
   return (
     <DragDropContext onDragEnd={handleDragAndDrop}>
       <Box

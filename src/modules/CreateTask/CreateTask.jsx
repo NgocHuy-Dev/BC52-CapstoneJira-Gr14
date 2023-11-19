@@ -1,17 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getProjectDetail,
-  updateProject,
   getAllProject,
   getStatus,
   getPriority,
   getTaskType,
   createTask,
 } from "../../apis/projectAPI";
-import { getUsers, getUserByProjectId } from "../../apis/userAPI";
+import { getUsers } from "../../apis/userAPI";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 import {
@@ -51,29 +49,9 @@ const createTaskSchema = yup.object().shape({
   priorityId: yup.number(),
 });
 
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: 300,
-    },
-  },
-};
-
 export default function CreateTask() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-
-  ///////////////////////////////Time tracking//////////////////////////////////////////////
-
-  // const handleChangeTimeline = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
-  // const handleInputChange = (event) => {
-  //   setValue(event.target.value === "" ? "" : Number(event.target.value));
-  // };
-
-  /////////////////////////////////////////////////////////////////////////
 
   const {
     register,
@@ -191,8 +169,6 @@ export default function CreateTask() {
       console.log(editorRef.current.getContent());
     }
   };
-  //=======================
-
   // User Asign
 
   const [selectedUserAsignOption, setSelectedUserAsignOption] = useState("");
@@ -205,26 +181,6 @@ export default function CreateTask() {
       setSelectedUserAsignOption(userasigns);
     },
   });
-
-  //reset option
-
-  const [choices, setChoices] = useState([]);
-
-  const handleChangeChoice = (event) => {
-    setChoices(event.target.value);
-  };
-
-  const handleDelete = (choice) => {
-    // setChoices((choices) => Array.filter((name) => choices.name !== choice));
-
-    setChoices(choice.filter((name) => choices.name !== choice));
-  };
-
-  /////////////tinymce-react
-
-  const [htmlContent, setHtmlContent] = useState("");
-
-  ////////////
 
   //------------------------------------------------------------------
   const [projectName, setProjectName] = useState();
@@ -269,7 +225,7 @@ export default function CreateTask() {
                         MenuProps={{
                           PaperProps: {
                             style: {
-                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                              maxHeight: 200,
                             },
                           },
                         }}
@@ -304,7 +260,7 @@ export default function CreateTask() {
                         MenuProps={{
                           PaperProps: {
                             style: {
-                              maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                              maxHeight: 200,
                             },
                           },
                         }}
@@ -398,7 +354,7 @@ export default function CreateTask() {
                     MenuProps={{
                       PaperProps: {
                         style: {
-                          maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                          maxHeight: 200,
                         },
                       },
                     }}
@@ -444,7 +400,7 @@ export default function CreateTask() {
                           MenuProps={{
                             PaperProps: {
                               style: {
-                                maxHeight: 200, // Đặt chiều cao tối đa của menu danh sách
+                                maxHeight: 200,
                               },
                             },
                           }}
@@ -547,7 +503,6 @@ export default function CreateTask() {
                     }
                     value={Number(valueTimeSpent)}
                     onChange={(event, newValue) => {
-                      // Cập nhật giá trị của valueTimeSpent khi Slider thay đổi
                       setValueTimeSpent(Number(newValue));
                     }}
                   />
@@ -599,20 +554,14 @@ export default function CreateTask() {
                         value={field.value}
                         onInput={(e) => {
                           const newValue = e.target.value;
-
-                          // Xóa các ký tự "e", "+", và "-" khỏi giá trị mới
                           const sanitizedValue = newValue.replace(
                             /[e+-]/gi,
                             ""
                           );
-
-                          // Kiểm tra giá trị mới sau khi xóa ký tự không hợp lệ
                           if (/^[0-9]*$/.test(sanitizedValue)) {
-                            // Nếu giá trị hợp lệ (chỉ chứa các chữ số), thì cập nhật giá trị
                             field.onChange(sanitizedValue);
                             setValueTimeSpent(Number(sanitizedValue));
                           }
-                          // Nếu giá trị không hợp lệ, không thực hiện thay đổi
                         }}
                       />
                     )}
@@ -644,19 +593,15 @@ export default function CreateTask() {
                         onInput={(e) => {
                           const newValue = e.target.value;
 
-                          // Xóa các ký tự "e", "+", và "-" khỏi giá trị mới
                           const sanitizedValue = newValue.replace(
                             /[e+-]/gi,
                             ""
                           );
 
-                          // Kiểm tra giá trị mới sau khi xóa ký tự không hợp lệ
                           if (/^[0-9]*$/.test(sanitizedValue)) {
-                            // Nếu giá trị hợp lệ (chỉ chứa các chữ số), thì cập nhật giá trị
                             field.onChange(sanitizedValue);
                             setValueTimeRemaining(Number(sanitizedValue));
                           }
-                          // Nếu giá trị không hợp lệ, không thực hiện thay đổi
                         }}
                       />
                     )}
