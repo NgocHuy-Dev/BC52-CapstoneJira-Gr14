@@ -113,6 +113,7 @@ export async function getTaskType() {
     throw error.response.data?.content;
   }
 }
+
 export async function createTask(payload) {
   try {
     const response = await fetcher.post("/Project/createTask", payload);
@@ -134,11 +135,9 @@ export async function editTask(payload) {
 // get Task Details
 export async function getTaskDetail(taskId) {
   try {
-    const response = await fetcher.get("/Project/getTaskDetail", {
-      params: {
-        id: taskId,
-      },
-    });
+    const response = await fetcher.get(
+      `/Project/getTaskDetail?taskId=${taskId}`
+    );
     return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;

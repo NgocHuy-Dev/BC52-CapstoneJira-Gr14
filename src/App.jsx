@@ -10,7 +10,7 @@ import NotFound from "./components/NotFound/NotFound";
 import Signin from "./modules/Auth/pages/Signin";
 import Signup from "./modules/Auth/pages/Signup";
 import CreateTask from "./modules/CreateTask/CreateTask";
-import EditTask from "./modules/EditTask/EditTask";
+// import EditTask from "./modules/EditTask/EditTask";
 import UserManagement from "./modules/User/UserManagement/UserManagement";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
               />
               <Route path="/createproject" element={<CreateProject />} />
               <Route path="/createtask/:projectId" element={<CreateTask />} />
-              <Route path="/edittask/:taskId" element={<EditTask />} />
+              {/* <Route path="/edittask/:taskId" element={<EditTask />} /> */}
               <Route path="/usermanagement" element={<UserManagement />} />
               {/* <Route path="/user/edit/:userId" element={<EditUser />} /> */}
             </Route>
