@@ -6,6 +6,7 @@ import {
   getTaskType,
   editTask,
   getTaskDetail,
+  removeTask,
 } from "../../apis/projectAPI.js";
 import {
   getComment,
@@ -98,6 +99,15 @@ export default function EditTask({
     mutationFn: (idComment) => deleteComment(idComment),
     onSuccess: () => {
       queryClient.invalidateQueries("getComment");
+    },
+  });
+
+  const { mutate: handleRemoveTask } = useMutation({
+    mutationFn: (taskId) => removeTask(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries("getTaskDetail");
+      Swal.fire("Đã xóa");
+      handleClose();
     },
   });
 
@@ -752,28 +762,46 @@ export default function EditTask({
           </Grid>
         </EditBox>
 
-        <Box sx={{ textAlign: "right" }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={{ marginRight: "12px" }}
-          >
-            Update Task
-          </Button>
-          <Button
-            sx={{
-              backgroundColor: "#FF0000",
-              "&:hover": {
-                backgroundColor: "#d23434",
-              },
-            }}
-            type="button"
-            variant="contained"
-            onClick={handleClose}
-          >
-            Cancel
-          </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box>
+            <Button
+              sx={{
+                marginLeft: "5px",
+                backgroundColor: "GrayText",
+                "&:hover": {
+                  backgroundColor: "#FF0000",
+                },
+              }}
+              onClick={() => handleRemoveTask(taskId)}
+              type="button"
+              variant="contained"
+            >
+              Delete task
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginRight: "12px" }}
+            >
+              Update Task
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: "#FF0000",
+                "&:hover": {
+                  backgroundColor: "#d23434",
+                },
+              }}
+              type="button"
+              variant="contained"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
       </form>
     </Container>

@@ -13,7 +13,6 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import EditTask from "../../../../../../../components/EditTask/EditTask";
 import { getProjectDetail } from "../../../../../../../apis/projectAPI";
-import TaskDetail from "../../../../../../../components/TaskDetail/TaskDetail";
 import { Tooltip } from "@mui/material";
 
 export default function Task({ task }) {
@@ -29,15 +28,11 @@ export default function Task({ task }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // Edit Modal
-  // Detail modal
-  const [open1, setOpen1] = useState(false);
-  const handleOpen1 = () => setOpen1(true);
-  const handleClose1 = () => setOpen1(false);
-  // Detail modal
 
   return (
     <>
       <Card
+        onClick={handleOpen}
         sx={{
           cursor: "pointer",
           boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
@@ -55,7 +50,6 @@ export default function Task({ task }) {
           >
             <Tooltip title="See more">
               <Typography
-                onClick={handleOpen1}
                 gutterBottom
                 sx={{
                   "&:hover": {
@@ -68,7 +62,7 @@ export default function Task({ task }) {
               </Typography>
             </Tooltip>
             <Tooltip title="Edit Task">
-              <EditIcon sx={{ color: "#0055CC" }} onClick={handleOpen} />
+              <EditIcon sx={{ color: "#0055CC" }} />
             </Tooltip>
           </Box>
           <Box
@@ -115,33 +109,6 @@ export default function Task({ task }) {
             handleClose={handleClose}
             projectId={projectId}
             taskId={task.taskId}
-          />
-        </Box>
-      </Modal>
-      <Modal
-        open={open1}
-        onClose={handleClose1}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            with: "100%",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "70%",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 1,
-            m: 1,
-          }}
-        >
-          <TaskDetail
-            handleClose={handleClose1}
-            projectId={projectId}
-            task={task}
           />
         </Box>
       </Modal>

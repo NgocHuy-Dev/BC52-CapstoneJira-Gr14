@@ -144,6 +144,16 @@ export async function getTaskDetail(taskId) {
   }
 }
 
+export const removeTask = async (taskId) => {
+  try {
+    const response = await fetcher.delete("/Project/removeTask", {
+      params: { taskId: taskId },
+    });
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.message;
+  }
+};
 // update Project
 
 export const updateStatus = async (payload) => {
