@@ -67,7 +67,7 @@ export default function Signup() {
     },
     // chuyển sang trang đăng nhập (/signin)
     onSuccess: () => {
-      navigate("/signin");
+      navigate("/sign-in");
     },
   });
 
@@ -204,11 +204,10 @@ export default function Signup() {
                 <Button
                   type="button"
                   onClick={() => {
-                    navigate("/signin");
+                    navigate("/sign-in");
                   }}
                 >
                   <Typography fontSize={13} textTransform={"none"}>
-                    {" "}
                     Signin now
                   </Typography>
                 </Button>

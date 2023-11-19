@@ -66,7 +66,7 @@ export default function EditDetail({ data, projectId }) {
     console.log("data submit", formatedValue);
     handleUpdate(formatedValue);
 
-    Swal.fire("Tạo dự án thành công!", "", "success");
+    Swal.fire("Cập nhật thành công!", "", "success");
   };
 
   // ======= xử lý Select  =====================
