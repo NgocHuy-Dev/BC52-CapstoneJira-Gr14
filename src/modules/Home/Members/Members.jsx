@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Avatar,
   AvatarGroup,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Tooltip,
-  Box,
 } from "@mui/material";
 import Zoom from "@mui/material/Zoom";
-import Popover from "@mui/material/Popover";
+
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { LightTooltip, CusTableCell } from "./styles";
 import AddMember from "./AddMember";
@@ -22,7 +18,6 @@ import { deleteUserFromProject } from "../../../apis/userAPI";
 import Swal from "sweetalert2";
 
 export default function Members({ members, projectId }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (payload) => {
@@ -31,20 +26,8 @@ export default function Members({ members, projectId }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project"] });
     },
+    onError: () => Swal.fire("không đủ quyền để thực hiện"),
   });
-
-  // console.log("userFromProject", userFromProject);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   return (
     <>

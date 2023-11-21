@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
-import { object, string } from "yup";
+import { object, string, email } from "yup";
 import { signin } from "../../../../apis/userAPI";
 import { useUserContext } from "../../../../contexts/UserContext/UserContext";
 import avt from "../../../../assets/img/logosign.png";
@@ -17,7 +17,6 @@ import {
   Paper,
   Typography,
   TextField,
-  Alert,
   IconButton,
   Box,
   Button,
@@ -35,12 +34,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const signinSchema = object({
-  email: string().required("Email không được để trống"),
-  passWord: string().required("Mật khẩu không được để trống"),
-  // .matches(
-  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-  //   "Mật khẩu ít nhất 8 kí tự, 1 kí tự hoa, 1 kí tự thường và 1 số"
-  // ),
+  email: string()
+    .email("Email không hợp lệ")
+    .required("Email không được để trống"),
+  passWord: string()
+    .required("Mật khẩu không được để trống")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+      "Mật khẩu ít nhất 8 kí tự, 1 kí tự hoa, 1 kí tự thường và 1 số"
+    ),
 });
 
 export default function Signin() {
@@ -75,6 +77,9 @@ export default function Signin() {
     onSuccess: (data) => {
       onSigninSuccess(data);
     },
+    onError: () => {
+      Swal.fire("lỗi");
+    },
   });
 
   const onSubmit = (values) => {
@@ -95,7 +100,7 @@ export default function Signin() {
   return (
     <Grid container component="main">
       <Grid item xs={12} sm={4} md={7}>
-        <CusBackGr variant="square" src={bg} />
+        <CusBackGr sx={{ height: "100vh" }} variant="square" src={bg} />
       </Grid>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <CusPaper>
@@ -176,7 +181,6 @@ export default function Signin() {
                   }}
                 >
                   <Typography fontSize={13} textTransform={"none"}>
-                    {" "}
                     Signup now
                   </Typography>
                 </Button>

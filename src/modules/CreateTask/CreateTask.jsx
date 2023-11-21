@@ -669,7 +669,7 @@ export default function CreateTask() {
           type="button"
           variant="contained"
           color="primary"
-          onClick={() => navigate("/projectdetail")}
+          onClick={() => navigate(`/projectdetail/${projectId}`)}
         >
           Cancel
         </Button>

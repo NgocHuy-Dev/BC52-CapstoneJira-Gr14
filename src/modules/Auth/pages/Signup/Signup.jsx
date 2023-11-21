@@ -87,7 +87,7 @@ export default function Signup() {
   return (
     <Grid container component="main">
       <Grid item xs={12} sm={4} md={7}>
-        <CusBackGr variant="square" src={bg} />
+        <CusBackGr sx={{ height: "100vh" }} variant="square" src={bg} />
       </Grid>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <CusPaper>

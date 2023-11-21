@@ -1,155 +1,99 @@
 import { React, useState } from "react";
 
-import { DataGrid, daDK } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 import { getUsers, deleteUser, editUser } from "./../../../apis/userAPI";
 import Loading from "./../../../components/Loading/Loading";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
 import {
-  IconButton,
   Tooltip,
-  Button,
   Box,
-  Typography,
   Grid,
+  DialogContent,
+  FormControl,
+  IconButton,
+  InputLabel,
+  OutlinedInput,
   TextField,
+  Typography,
+  Avatar,
+  Modal,
+  Paper,
+  InputBase,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { blue } from "@mui/material/colors";
+import { object, string, ref, number } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ButtonMain } from "./UserManagemanet.styles";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-/////////edit////////////////
-
-const editUserschema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  phoneNumber: yup.string().required("Vui lòng nhập số điện thoại của bạn"),
+const editUserschema = object({
+  email: string()
+    .required("Email must not be empty")
+    .email("Email is not in the correct format"),
+  password: string()
+    .required("Password must not be empty")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/,
+      "Password must be at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+    ),
+  confirmPassword: string()
+    .oneOf([ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+  name: string().required("Name must not be empty"),
+  phoneNumber: number().positive().typeError("You can only enter the number"),
 });
 
 export default function UserManagement() {
-  //  search////////////////
+  const queryClient = useQueryClient();
   const [searchText, setSearchText] = useState("");
+  const [userId, setUserId] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const { data: allUser = [], isLoading } = useQuery({
+    queryKey: ["allUser"],
+    queryFn: getUsers,
+  });
 
-  const handleSearch = () => {
-    console.log(`Searching for ${searchText}`);
-    // Your search logic here
-  };
-
-  /////////////////////////////////Edit///////////////////////////////////////////
-
-  // dungf state ddeer set ungws  id conf ddongj dungf setValue
-  const [id, setId] = useState("");
-
-  const [isOpen, setIsOpen] = useState(false);
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
+    setValue,
+    reset,
   } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+      phoneNumber: "",
+    },
     resolver: yupResolver(editUserschema),
     mode: "onTouched",
   });
 
-  const {
-    mutate: handleEdit,
-    isLoading: loading,
-    error,
-  } = useMutation({
+  const { mutate: handleEdit } = useMutation({
     mutationFn: (payload) => editUser(payload),
-    onSuccess: (data) => {
-      getUsers(data);
+    onSuccess: () => {
+      setOpen(false);
+
+      Swal.fire("Cập nhật thành công!");
+      reset();
+      queryClient.invalidateQueries("allUser");
     },
+    onError: (error) => Swal.fire(error),
   });
-  const onSubmit = (data) => {
-    // Swal.fire("Đăng nhập thành công!", "", "success");
-
-    handleEdit(data);
-    setIsOpen(false);
-    setValue("userId", "");
-
-    setValue("name", "");
-    setValue("email", "");
-    setValue("phoneNumber", "");
-    toast.success("Chỉnh sửa thông tin người dùng thành công!", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-    console.log(data);
-  };
-  const handleUpdate = (value) => {
-    setIsOpen(true);
-    setValue("userId", value.userId);
-
-    setValue("name", value.name);
-    setValue("email", value.email);
-    setValue("phoneNumber", value.phoneNumber);
-  };
-
-  //////////////////////////////////////////////////////////////
-
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  // tạo collumns
-
-  const columns = [
-    { field: "userId", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Name", width: 200 },
-
-    {
-      field: "avatar",
-      headerName: "Avatar",
-      width: 130,
-      renderCell: (params) => (
-        <img
-          src={params.value}
-          alt="Avatar"
-          style={{ height: 50, borderRadius: "50%" }}
-        />
-      ),
-    },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "phoneNumber", headerName: "Phone number", width: 200 },
-
-    {
-      field: "action",
-      headerName: "Action",
-      width: 130,
-      renderCell: (params) => (
-        <div>
-          <Tooltip title="Delete User">
-            <IconButton onClick={() => handleDelete(params.row.userId)}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Edit User">
-            <IconButton
-              aria-label="update"
-              size="large"
-              onClick={() => handleUpdate(params.row)}
-            >
-              <EditIcon fontSize="inherit" color="success" />
-            </IconButton>
-          </Tooltip>
-        </div>
-      ),
-    },
-  ];
-
-  // xóa user
 
   const { mutate: handleDeleteUser } = useMutation({
     mutationFn: (id) => {
       return deleteUser(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries("allUser");
     },
   });
 
@@ -167,21 +111,71 @@ export default function UserManagement() {
       }
     });
   };
+  const onSubmit = (data) => {
+    if (data.password !== data.confirmPassword) {
+      // toast.error(" Xác nhận mật khẩu không trùng khớp!");
+    } else {
+      handleEdit({ ...data, id: userId });
+    }
+  };
 
-  //
-  const { data: allUser = [], isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: getUsers,
-  });
-  console.log(allUser);
+  const handleUpdate = (value) => {
+    setOpen(true);
+    setValue("id", value.userId);
+    setValue("email", value.email);
+    setValue("name", value.name);
+    setValue("phoneNumber", value.phoneNumber);
+    setUserId(value.userId);
+  };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  // tạo collumns
+  const columns = [
+    { field: "userId", headerName: "ID", width: 100 },
+    { field: "name", headerName: "Name", width: 200 },
 
-  const rows = allUser;
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      width: 130,
+      renderCell: (params) => (
+        <Avatar
+          src={params.value}
+          alt="Avatar"
+          sx={{
+            height: "40px",
+            width: "40px",
+          }}
+        />
+      ),
+    },
+    { field: "email", headerName: "Email", width: 200 },
+    { field: "phoneNumber", headerName: "Phone number", width: 200 },
 
-  //
+    {
+      field: "action",
+      headerName: "Action",
+      width: 130,
+      renderCell: (params) => (
+        <div>
+          <Tooltip title="Delete User">
+            <IconButton onClick={() => handleDelete(params.row.userId)}>
+              <DeleteIcon sx={{ color: "red" }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit User">
+            <IconButton
+              sx={{ color: blue[500] }}
+              aria-label="update"
+              size="large"
+              onClick={() => handleUpdate(params.row)}
+            >
+              <EditIcon fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
 
   if (isLoading) {
     return <Loading />;
@@ -189,149 +183,214 @@ export default function UserManagement() {
 
   return (
     <>
-      {/* /////////////////////////////////Search//////////////////////////////////////////////// */}
-
       <Box
-        sx={{ display: "flex", justifyContent: "space-between", padding: 2 }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px",
+          margin: "5px",
+        }}
       >
         <Box>
           <Typography
-            sx={{ fontSize: "30px", fontWeight: "bold", color: "#FE6B8B" }}
+            sx={{ fontSize: "35px", fontWeight: "bold", color: "#556CD6" }}
           >
-            User Management
+            USER MANAGEMENT
           </Typography>
         </Box>
         <Box>
-          <TextField
-            type="text"
-            placeholder="Search..."
-            value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
-            style={{
-              backgroundColor: "lavender",
-              marginLeft: "50px",
-              height: "55px",
+          <Paper
+            component="form"
+            sx={{
+              p: "4px 4px",
+              mr: 1,
+              display: "flex",
+              alignItems: "center",
+              width: 200,
             }}
-          />
-          <ButtonMain
-            onClick={() => handleSearch()}
-            style={{ marginLeft: "5px", height: "55px" }}
           >
-            Search
-          </ButtonMain>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search" }}
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+            />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
         </Box>
       </Box>
 
-      <div style={{ height: 580, width: "100%" }}>
-        <DataGrid
-          // rows={rows}
-          // thiet lap de search
-          rows={rows.filter((row) =>
-            Object.values(row).some(
-              (value) => String(value).indexOf(searchText) > -1
-            )
-          )}
-          getRowId={(row) => row.userId}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 9 },
-            },
-          }}
-          // pageSizeOptions={[9, 10]}
-          checkboxSelection
-        />
-      </div>
+      <DataGrid
+        sx={{ margin: "5px 20px", height: "580px" }}
+        rows={allUser.filter((row) =>
+          Object.values(row).some(
+            (value) => String(value).indexOf(searchText) > -1
+          )
+        )}
+        getRowId={(row) => row.userId}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 9 },
+          },
+        }}
+        pageSizeOptions={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+      />
 
-      {/* Modal edit user */}
-      {isOpen && (
+      <Modal open={open} onClose={handleClose}>
         <Box
-          style={{
-            backgroundColor: "lavender",
-            zIndex: "5",
-            position: "fixed",
+          sx={{
+            position: "absolute",
+            with: "100%",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            height: "50%",
+            width: "50%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 1,
+            m: 1,
           }}
         >
           <Box display={"flex"} justifyContent={"center"}>
             <Typography
-              style={{ fontSize: "30px", fontWeight: "bolder" }}
+              sx={{ fontSize: "30px", fontWeight: "bold" }}
               variant="h2"
               gutterBottom
             >
-              Chỉnh sửa thông tin người dùng
+              Edit user
             </Typography>
-            <button
-              onClick={() => setIsOpen(false)}
-              style={{ position: "absolute", top: "0%", left: "96%" }}
-            >
-              X
-            </button>
           </Box>
 
-          <Box
-            marginLeft={1}
-            component="form"
-            noValidate
-            autoComplete="off"
-            mt={2}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Typography>Số thứ tự </Typography>
-                <TextField
-                  disabled
-                  // value={id}
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.userId}
-                  helperText={errors.userId?.message}
-                  {...register("userId")}
-                />
+          <DialogContent dividers sx={{ padding: 2 }}>
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { width: "100%" },
+              }}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    id="email-basic"
+                    fullWidth
+                    label="Email"
+                    variant="outlined"
+                    sx={{ mb: 3 }}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                    {...register("email")}
+                  />
+                  <FormControl
+                    sx={{ mb: 3 }}
+                    variant="outlined"
+                    error={!!errors.email}
+                  >
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type="text"
+                      label="Password"
+                      {...register("password")}
+                    />
+                  </FormControl>
+                  {!!errors.password && (
+                    <Typography
+                      sx={{
+                        fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+                        fontWeight: 400,
+                        fontSize: "0.75rem",
+                        lineHeight: 1.66,
+                        letterSpacing: "0.03333em",
+                        margin: "-20px 14px 25px 14px",
+                        color: "#d32f2f",
+                      }}
+                    >
+                      {errors.password?.message}
+                    </Typography>
+                  )}
+
+                  <FormControl
+                    sx={{ mb: 3 }}
+                    variant="outlined"
+                    error={!!errors.confirmPassword}
+                  >
+                    <InputLabel htmlFor="confirm-password-password">
+                      Confirm Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="confirm-password-password"
+                      type="text"
+                      label="Confirm Password"
+                      {...register("confirmPassword")}
+                    />
+                  </FormControl>
+                  {!!errors.confirmPassword && (
+                    <Typography
+                      sx={{
+                        fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+                        fontWeight: 400,
+                        fontSize: "0.75rem",
+                        lineHeight: 1.66,
+                        letterSpacing: "0.03333em",
+                        margin: "-20px 14px 25px 14px",
+                        color: "#d32f2f",
+                      }}
+                    >
+                      {errors.confirmPassword?.message}
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="name-basic"
+                    fullWidth
+                    label="Name"
+                    variant="outlined"
+                    sx={{ mb: 3 }}
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                    {...register("name")}
+                  />
+                  <TextField
+                    id="phone-basic"
+                    fullWidth
+                    label="Phone Number"
+                    variant="outlined"
+                    sx={{ mb: 3 }}
+                    error={!!errors.phoneNumber}
+                    helperText={errors.phoneNumber?.message}
+                    {...register("phoneNumber")}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <Typography>Họ tên </Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.name}
-                  helperText={errors.matnameKhau?.message}
-                  {...register("name")}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography>Email </Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                  {...register("email")}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography>Số điện thoại </Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.phoneNumber}
-                  helperText={errors.phoneNumber?.message}
-                  {...register("phoneNumber")}
-                />
-              </Grid>
-            </Grid>
-            <Box display={"flex"} justifyContent={"center"}>
-              <ButtonMain variant="contained" m="10px 0 0 0" type="submit">
-                Chỉnh sửa
-              </ButtonMain>
+
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <ButtonMain color="inherit" onClick={() => setOpen(false)}>
+                  Cancel
+                </ButtonMain>
+                <ButtonMain
+                  sx={{ paddingLeft: "10px" }}
+                  color="warning"
+                  variant="contained"
+                  type="submit"
+                >
+                  Edit
+                </ButtonMain>
+              </Box>
             </Box>
-          </Box>
+          </DialogContent>
         </Box>
-      )}
+      </Modal>
     </>
   );
 }

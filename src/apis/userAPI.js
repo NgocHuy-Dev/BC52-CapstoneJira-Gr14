@@ -45,21 +45,9 @@ export async function getUsers() {
 // getUsers by projectID
 export const getUserByProjectId = async (projectId) => {
   try {
-    const response = await fetcher.get("/Users/getUserByProjectId", {
+    await fetcher.get("/Users/getUserByProjectId", {
       params: {
         projectId: projectId,
-      },
-    });
-  } catch (error) {
-    throw error.response.data;
-  }
-};
-// xóa user
-export const deleteUser = async (userId) => {
-  try {
-    const response = await fetcher.delete("/Users/deleteUser", {
-      params: {
-        userId: userId,
       },
     });
   } catch (error) {
@@ -69,7 +57,7 @@ export const deleteUser = async (userId) => {
 
 export const assignUserProject = async (payload) => {
   try {
-    const response = await fetcher.post("/Project/assignUserProject", payload);
+    await fetcher.post("/Project/assignUserProject", payload);
   } catch (error) {
     throw error.response.data;
   }
@@ -77,23 +65,30 @@ export const assignUserProject = async (payload) => {
 
 export const deleteUserFromProject = async (payload) => {
   try {
-    const response = await fetcher.post(
-      "/Project/removeUserFromProject",
-      payload
-    );
+    await fetcher.post("/Project/removeUserFromProject", payload);
   } catch (error) {
     throw error.response.data;
   }
 };
 // edit user
-export const editUser = async (userId) => {
+export const editUser = async (payload) => {
   try {
-    const response = await fetcher.put("/Users/editUser", {
+    const response = await fetcher.put("/Users/editUser", payload);
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
+  }
+};
+
+export const deleteUser = async (id) => {
+  try {
+    const response = await fetcher.delete("/Users/deleteUser", {
       params: {
-        userId: userId,
+        id: id,
       },
     });
+    return response.data?.content;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data?.content;
   }
 };

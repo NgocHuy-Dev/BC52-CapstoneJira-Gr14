@@ -17,10 +17,6 @@ import Members from "./Members/Members";
 export default function Home() {
   const [searchText, setSearchText] = useState("");
 
-  const handleSearch = () => {
-    console.log(`Searching for ${searchText}`);
-    // Your search logic here
-  };
   const navigate = useNavigate();
   const { data: allProject = [], isLoading } = useQuery({
     queryKey: ["project"],
@@ -86,13 +82,14 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           padding: "20px",
+          margin: "5px",
         }}
       >
         <Typography
@@ -123,6 +120,7 @@ export default function Home() {
         </Paper>
       </Box>
       <DataGrid
+        sx={{ margin: "5px 20px", height: "580px" }}
         rows={allProject.filter((row) =>
           Object.values(row).some(
             (value) => String(value).indexOf(searchText) > -1
@@ -137,6 +135,6 @@ export default function Home() {
         pageSizeOptions={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
         checkboxSelection={false}
       />
-    </div>
+    </>
   );
 }
